@@ -5,7 +5,7 @@ nghĩa là không cần có giai đoạn thiết lập liên kết trước khi 
 không đảm bảo rằng IP datagram sẽ tới đích 
 và không duy trì bất kỳ thông tin nào về những datagram đã gửi đi. 
 
-!(https://4yatfw.bn1.livefilestore.com/y2pj3_VXtcreN016i6uoHEFSeMQAc6rANxHt3Dkw0cThQkIz15HRRIa3-oyTVkYxkjWWps7EHp3mR-xBoggGUd6XSnt2u-wFruAeBu8_LA0skM/01-%20IP%20header.png?psid=1)
+!(https://4yatfw.bn1.livefilestore.com/y2pj3_VXtcreN016i6uoHEFSeMQAc6rANxHt3Dkw0cThQkIz15HRRIa3-oyTVkYxkjWWps7EHp3mR-xBoggGUd6XSnt2u-wFruAeBu8_LA0skM/01-%20IP%20header.png)
 
 ##Ý nghĩa các tham số trong IP header:
 − Version (4 bit): chỉ phiên bản (version) hiện hành của IP được cài đặt.
@@ -13,7 +13,9 @@ và không duy trì bất kỳ thông tin nào về những datagram đã gửi 
 − IHL: Internet header length (4 bit): chỉ độ dài phần header tính theo đơn vị từ (word - 32 bit)
 
 − Type of Service (8 bit): đặc tả tham số về yêu cầu dịch vụ: Thông tin về loại dịch vụ và mức ưu tiên của gói IP.
+	
 	Precedence (3 bits): chỉ thị về quyền ưu tiên gửi datagram, cụ thể là:
+	
 	111 Network control (cao nhất)
 	
 	110 Internetwork Control
@@ -35,7 +37,7 @@ và không duy trì bất kỳ thông tin nào về những datagram đã gửi 
 − Indentification (16 bit): là trường định danh, cùng các tham số khác như địa chỉ nguồn (Source address) và địa chỉ đích (Destination address) để định danh duy nhất cho mỗi datagram được gửi đi bởi 1 trạm. Thông thường phần định danh (Indentification) được tăng thêm 1 khi 1 datagram được gửi đi.
 − Flags (3 bit): các cờ, sử dụng trong khi phân đoạn các datagram. 
 
-!(https://4yatfw.bn1.livefilestore.com/y2phlastvdF-KwMXVyPrpwowT-ZnQ8XKpoEBONbun1VqRZxk89sye8YrlKDEUYGbp26_XRwDlHFJdVPTD79zHYHdO6sOBawzjAEvIlelqtpnts/02-%20flag.png?psid=1)
+!(https://4yatfw.bn1.livefilestore.com/y2phlastvdF-KwMXVyPrpwowT-ZnQ8XKpoEBONbun1VqRZxk89sye8YrlKDEUYGbp26_XRwDlHFJdVPTD79zHYHdO6sOBawzjAEvIlelqtpnts/02-%20flag.png)
 
 
 − Fragment Offset (13 bit): chỉ vị trí của đoạn phân mảnh (Fragment) trong datagram tính theo đơn vị 64 bit.
