@@ -14,7 +14,7 @@ và không duy trì bất kỳ thông tin nào về những datagram đã gửi 
 
 *	**Type of Service (8 bit):** đặc tả tham số về yêu cầu dịch vụ: Thông tin về loại dịch vụ và mức ưu tiên của gói IP.
 	
-	```sh
+```sh
 	Precedence (3 bits): chỉ thị về quyền ưu tiên gửi datagram, cụ thể là:
 	
 	111 Network control (cao nhất)
@@ -32,7 +32,7 @@ và không duy trì bất kỳ thông tin nào về những datagram đã gửi 
 	001 Priority
 	
 	000 Routine (thấp nhất)
-		```
+```
 *	**Total length (16 bit):** chỉ độ dài toàn bộ IP datagram tính theo byte. Dựa vào trường này và trường header length ta tính được vị trí bắt đầu của dữ liệu trong IP datagram.
 
 *	**Indentification (16 bit):** là trường định danh, cùng các tham số khác như địa chỉ nguồn (Source address) và địa chỉ đích (Destination address) để định danh duy nhất cho mỗi datagram được gửi đi bởi 1 trạm. Thông thường phần định danh (Indentification) được tăng thêm 1 khi 1 datagram được gửi đi.
