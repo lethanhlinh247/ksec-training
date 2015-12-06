@@ -75,7 +75,7 @@ Một đặc tính khác mà giao thức IP cho phép đó là sự phân mảnh
 
 Tuy nhiên , nếu những mạng khác không phải là mạng Ethernet , chúng có thể sẽ dùng kích thước MTU khác nhau  . Nếu điều đó xảy ra thì Router mà nhận những Frame có MTU là 1500 Byte sẽ cắt Datagram IP bên trong mỗi Frame thành nhiều mẩu để truyền trên mạng khác có kích thước MTU nhỏ hơn . Nhờ vào việc đến Router mà có đầu ra nối với mạng Ethernet thì Router này sẽ lắp ráp lại Datagram gốc ban đầu .
 
-Ví dụ hình trên, Frame ban đầu dùng MTU có kích thước 1500 Byte . Khi tới mạng khác với MTU có kích thước 620 Byte thì mỗi Frame ban đầu được phân chia thành 03 Frame ( hai có kích thước 600 Byte và một có kích thước 300 Byte ) . Sau đó Router mà là đầu ra của mạng này ( Router 2 ) sẽ lắp ráp lại thành Datagram ban đầu .
+Ví dụ hình trên, Frame ban đầu dùng MTU có kích thước 1500 Byte . Khi tới mạng khác với MTU có kích thước 620 Byte thì mỗi Frame ban đầu được phân chia thành 03 Frame ( hai có kích thước 620 Byte và một có kích thước 300 Byte ) . Sau đó Router mà là đầu ra của mạng này ( Router 2 ) sẽ lắp ráp lại thành Datagram ban đầu .
 
 
 
