@@ -81,6 +81,7 @@ Trong /etc/shadow có thể khóa tài khoản bằng cách thay từ khóa x b�
 #groupadd [option] <groupname>
 ```
 Tùy chọn: 
+
 	* -g: gid: chỉ số nhóm người dùng, chỉ số này là duy nhất.
 	* -r: Tùy chọn này được dùng khi thêm tài khoản hệ thống.
 	* -f: Tùy chọn này bỏ qua việc nhắc nhở, nếu nhóm người dùng đã tồn tại, sẽ thực hiện ghi đè.
