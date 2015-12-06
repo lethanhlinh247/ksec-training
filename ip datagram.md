@@ -69,7 +69,7 @@ và không duy trì bất kỳ thông tin nào về những datagram đã gửi 
 	
 ##	Quá trình phân mảnh IP datagram
 
-![](http://www.tuvantinhoc1088.com/my_documents/my_pictures/Giainghia2/TCP%20IP/hinh5.gif)
+![](http://i.imgur.com/Gjdivyl.gif)
 
 Một đặc tính khác mà giao thức IP cho phép đó là sự phân mảnh ( Fragmentation ) . Như chúng ta đã đề cập trước đó , để tới đích , Datagram của IP sẽ có thể qua một vài mạng khác nhau ở giữa của đường đi . Nếu tất cả những mạng trong đường đi giữa máy tính truyền và máy tính nhận là một , thì mọi thứ đều tốt đẹp , bởi vì tất cả Router sẽ làm việc với cùng một cấu trúc ( có nghĩa là có cùng kích thước MTU ) .
 
