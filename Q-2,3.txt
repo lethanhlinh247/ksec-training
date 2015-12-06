@@ -1,0 +1,11 @@
+Em có biết là trong 1 phiên bắt tay TCP, gói syn đầu tiên có một cờ được set, cờ đó là cờ nào ko? Nhân thể học về ip datagram, em tìm hiểu thêm cho anh cách hoạt động của phần mềm traceroute nhé, tại sao nó lại có thể tìm được đường đi chính xác của gói tin.
+
+Ở bài user-group, đề nghị tìm hiểu lại kỹ 7 trường trong tập tin /etc/password. Tìm hiểu thêm tùy chọn của lệnh useradd (em bỏ xót 1 tùy chọn rất quan trọng của lệnh này). Với tập tin etc/shadow, cũng yêu cầu tìm hiểu kỹ hơn. Cố gắng tìm hiểu xem cả cách tạo ra password của linux như thế nào, tại sao họ lại có thể bruteforce đc password này.
+
+Bài phân quyền, đề nghị em tìm hiểu thêm kỹ về sticky bit, bổ sung lại nhé.
+
+Bài command, yêu cầu em bổ sung thêm các tùy chọn nhé. Sử dụng command mà ko chú ý đến tùy chọn nó không khác việc đưa cho một người 1 cái smartphone mà người đó chỉ biết nghe và gọi, nó có khác j mấy con cục gạch đâu.
+
+Bài TCP, tìm hiểu thêm việc sử dụng trường window để điều chỉnh việc truyền dữ liệu. Cụ thể là đọc bài này và trả lời cách dùng trường window để điều chỉnh quá trình truyền dữ liệu như thế nào: http://www.rhyshaden.com/tcp.htm (phần Sliding Window). Trường window này cũng có thể lợi dụng để tấn công các máy chủ khác. Em có thể mở rộng tìm hiểu cách tấn công dựa trên điều chỉnh trường window (cụ thể là 1 loại tấn công DOS)
+Quá trình bắt tay 3 bước có điểm yếu j? Nó được tận dụng trong tấn công nào? Mô tả cách thức tấn công lợi đụng điểm yếu này.
+
