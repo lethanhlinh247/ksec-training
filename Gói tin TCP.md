@@ -158,62 +158,12 @@ vì server cố gắng khởi tạo kết nối với chính nó trong một vò
 
 ![](http://flylib.com/books/1/36/1/html/2/images/07fig08.jpg)
  
-
-
-##6. Cơ chế hoạt động của traceroute:
-###6.1 Traceroute:
-* Traceroute là một ứng dụng giúp chúng ta xác định "đường đi" của các gói tin (packets) từ một máy này (host) đến một máy khác.
-* Đường đi (path) ở đây được hiểu là một chuỗi gồm các trạm (IP-router) mà packets phải đi qua để đến được đích. 
-
-###6.2 ICMP:
-* ICMP – Internet Control Message Protocol. ICMP được dùng để thông báo các lỗi xảy ra trong quá trình truyền đi của các gói dữ liệu trên mạng. ICMP thuộc tầng vận huyển – Transpoort Layer!
-* Tất cả các ICMP messages đều được chuyển đi cùng với các IP datagrams.
-![](http://images.slideplayer.com/5/1485359/slides/slide_10.jpg)
-
-	* Trường type có 15 giá trị khác nhau, tùy thuộc vào từng loại ICMP error message cụ thể. Ví dụ type=3 để chỉ định cho thông báo lỗi “Không đến được đích” – “Destination unreachable” error message!
-	* Trường code = sub-error dùng để xác định chính xác lỗi đã xảy ra. Ví dụ, type=3 và code=0 nghĩa là “Network Unreachable”(không đến được mạng); nếu type=3, code=1 nghĩa là “Host Unreachable”(không đến được host)…
-	
-###6.3 TTL: Time-to-live 
-* TTL là một trường 8 bit trong IP header, trường này được khởi tạo bởi bên gửi (sender). (Giá trị được khuyến cáo của trường này theo "Assigned Numbers - RFC" là 64).
-* Mỗi một router khi xử lý IP-datagram sẽ giảm giá trị TTL của datagram này đi một. Mục đích của trường TTL là giúp cho datagram tránh đi vào những vòng lặp vô tận (infinite loops). Do hầu hết các bộ định tuyến -router- đều giữ các datagram không quá một giây, nên trường TTL cũng được dùng như một bộ đếm hop (hop counter). 
-
-###6.4 Traceroute - TTL - ICMP 
-* Khi một router nhận được một IP-datagram có giá trị TTL bằng 0 hoặc 1, nó không được phép chuyển datagram này đi tiếp. (Một host đích khi nhận được datagram như vậy, có thể chuyển datagram này tới ứng dụng tương ứng, vì datagram này không phải được tiếp tục "định tuyến". Nhưng thông thường không có hệ thống nào nhận được datagram có TTL bằng 0). Thay vào đó router sẽ bỏ qua (discard) datagram này và gửi trả lại cho host nguồn một thông báo lỗi ICMP time exceed (vượt thời hạn).
-* Mấu chốt ở Traceroute chính là gói IP-datagram chứa ICMP nói trên sẽ cung cấp địa chỉ IP của router. Địa chỉ này nằm ở trường "địa chỉ nguồn" (source address - xem hình IP Header). 
-
-###6.5 Traceroute - Cơ chế hoạt động
-* Để xác định "đường đi" - path - của packets từ một host nguồn A đến một host đích B, đầu tiên traceroute sẽ gởi một IP-datagram có TTL=1 đến host B. Router đầu tiên xử lý datagram này sẽ giảm TTL đi một, bỏ qua (discard) datagram này và gửi trở lại A một datagram chứa ICMP time exceeded. Nhờ đó router đầu tiên thuộc path được định danh.
-* Tiếp theo traceroute gửi một datagram có TTL=2 tới host B nhằm xác định địa chỉ IP của router thứ hai trên path. Router thứ nhất sẽ giảm TTL đi một (--> TTL lúc này sẽ bằng 1) và chuyển datagram đi tiếp. Router thứ 2 thấy TTL=1, giảm tiếp đi một, bỏ qua datagram này, gửi ICMP time exceeded trở lại A.
-* Tương tự như vậy, quá trình trên được tiếp diễn cho đến khi datagram gặp được host đích B. Mặc dù gói datagram đến được đích có TTL=1, host B sẽ không loại bỏ datagram này và cũng không gửi ICMP time exceeded trở lại, bởi vì datagram này đã đến được nơi nó muốn đến. Vấn đề được đặt ra ở đây là làm sao traceroute biết được khi nào đã đến đích?
-* Trong *nix, ở chế độ mặc định (default), traceroute gửi những gói UDP-datagram, nhưng nó sẽ chọn cổng UDP đích có giá trị lớn (lớn hơn 30.000), vì khó mà có một ứng dụng nào đó đang sử dụng cổng này, nghĩa là cổng đang đóng. Do đó, khi datagram đến, UDP-module ở host đích B sẽ phun ra ngay một thông báo lỗi ICMP "port unreachable" (không đến được cổng). Bây giờ traceroute chỉ việc phân biệt những ICMP mà nó nhận được để khẳng định đã đến điểm cuối trên path chưa (ICMP time exceed và ICMP port unreachable).
-
-###6.6 Traceroute - Output
-
-```sh
-traceroute to vozforums.com (118.69.192.81), 30 hops max, 60 byte packets
- 1  192.168.1.1 (192.168.1.1)  2.073 ms  1.959 ms  1.887 ms
- 2  100.123.0.7 (100.123.0.7)  6.144 ms  6.110 ms  5.989 ms
- 3  42.112.2.30 (42.112.2.30)  5.893 ms  5.778 ms  5.717 ms
- 4  42.117.11.69 (42.117.11.69)  38.406 ms 183.80.133.150 (183.80.133.150)  33.794 ms  35.041 ms
- 5  42.119.253.14 (42.119.253.14)  34.982 ms 118.69.252.158 (118.69.252.158)  34.907 ms 42.119.253.18 (42.119.253.18)  35.187 ms
- 6  42.119.253.134 (42.119.253.134)  35.115 ms cache.google.com (42.119.253.166)  38.884 ms cache.google.com (42.119.253.138)  34.215 ms
- 7  118.69.192.81 (118.69.192.81)  34.135 ms  55.683 ms  55.465 ms
-
-```
-* Dòng đầu tiên cho biết hostname và địa chỉ IP của hệ thống đích. Dòng này còn cho chúng ta biết thêm giá trị TTL<=30 và kích thước của datagram là 60 bytes.
-* Dòng thứ 2 cho biết router đầu tiên nhận được datagram là 192.168.1.1, giá trị của TTL khi gởi đến router này là 1. Router này sẽ gởi trở lại cho chương trình traceroute một ICMP message error “Time Exceeded”. Traceroute sẽ gởi tiếp một datagram đến hệ thống đích.
-* Dòng thứ 3, 100.123.0.7 nhận được datagram có TTL=1(router thứ nhất đã giảm một trước đó: TTL=2-1=1).
-* Tương tự cho đến dòng thứ 7.
-* Dòng thứ 8, 118.69.192.81 nhận được datagram có TTL = 1. Tuy nhiên, ở đây nó sẽ gởi trở lại cho traceroute một ICMP error message “Port Unreachable”. Khi nhận được ICMP message này, traceroute sẽ biết được đã đến được hệ thống đích và kết thúc.
-* Trong trường hợp router không trả lời sau 5 giây, traceroute sẽ in ra một dấu sao “*”(không biết) và tiếp tục gởi datagram khác đến host đích!
-* 3 Cột thời gian tiếp theo: Là khoảng thời gian để gói tin bắt đầu đi và quay trở lại máy tính của mình. (Đơn vị là phần nghìn giây). Có 3 cột thời gian vì traceroute gửi 3 gói tin hiệu riêng biệt.
-
-##7. Sliding Window 
+##6. Sliding Window 
 ![](http://www.highteck.net/images/66-TCP-acknowledgement.jpg)
 
 Giao thức cửa sổ trượt cho phép bên gửi có thể gửi nhiều khung dữ liệu đồng thời.
 
-###7.1: Cách hoạt động
+###6.1: Cách hoạt động
 
 * 1: Squence number của gói tin TCP ở người gửi là y.
 * 2: Người nhận chỉ định kích thước cửa sổ của mỗi gói tin là x. Giá trị này được quy định bởi hệ điều hành hoặc
@@ -228,14 +178,14 @@ cho đến khi nhận được gói tin từ máy nhận báo kích thước c�
 * 8: Nếu dữ liệu không được nhận, thì nó được thiết lập ngay sau khi nhận được một ACK, sau đó kích thước cửa sổ sẽ bị giảm đi một nửa.
 * 9: Ở lần truyền thành công tiếp theo, kích thước sẽ lại được bắt đầu từ x.
 
-###7.2: Window Size
+###6.2: Window Size
 * Trường này được sử dụng bởi người nhận để chỉ ra rằng người gửi chỉ được gửi lượng dữ liệu là bao nhiêu. Bất kể người gửi hoặc người nhận là ai, thì trường này luôn tồn tại và được sử dụng.
 * Trường Window Size sử dụng đơn vị đo là byte
 * Khi lượng dữ liệu được truyền bằng giá trị Window Size hiện tại, người gửi sẽ mong đợi 1 giá trị Window Size mới từ người nhận, cùng với 1 báo nhận cho giá trị Window Size vừa nhận được.
 
 ![](http://3.bp.blogspot.com/-QEWmsb6n9Ww/UcbxDw_4m_I/AAAAAAAAAJ4/nmODTuoCplk/s1600/tcp-analysis-section-5-3.gif)
 
-###7.3: TCP Sequence Prediction Attack
+###6.3: TCP Sequence Prediction Attack
 
 * Host A và Host B đang kết nối với nhau. Hacker đang cố theo dõi các gói tin trao đổi giữa A và B.
 * Cách hacker thực hiện:
