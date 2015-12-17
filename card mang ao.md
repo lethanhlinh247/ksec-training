@@ -4,7 +4,7 @@
 ```sh
 nano /etc/network/interfaces
 ```
-Phải tên card mạng ảo gồm 2 phần. eno1677736 là tên của card mạng thật. 1, chỉ bí danh của card mạng ảo.
+Phải tên card mạng ảo gồm 2 phần. eno1677736 là tên của card mạng thật. 1, chỉ số của card mạng ảo.
 
 ```sh
 auto eno1677736:1
