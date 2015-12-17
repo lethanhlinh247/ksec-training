@@ -56,6 +56,7 @@ Các file cấu hình của apache được đặt tại /etc/apache2
 ###2.1 Không hiển thị phiên bản apache.
 
 Mở file */etc/apache2/conf-enabled/security.conf*:
+
 	* **ServerTokens Prod:** Hiển thị "Server: Apache"
     * **ServerTokens Major:** Hiển thị "Server: Apache/2
     * **ServerTokens Minor:** Hiển thị "Server: Apache / 2.2″
