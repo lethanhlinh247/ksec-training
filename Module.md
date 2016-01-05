@@ -1,12 +1,29 @@
-Mod_Rewrite là một module của Apache Web Server, cho phép viết lại địa chỉ của website. Thông thường, Mod_Rewrite chuyển đổi từ một địa chỉ website động sang địa chỉ tĩnh. Quy luật chuyển đổi phân tích địa chỉ website được client gởi đến và dịch sang một địa chỉ mới trước khi thể hiện trên trình duyệt.
+#Module trong Apache
 
-Ví dụ:
-Mod_Rewrite chuyển đổi một địa chỉ động:
+##2. Module Rewrite
+* Mod_Rewrite là một module của Apache Web Server, cho phép viết lại địa chỉ của website. 
+* Thông thường, Mod_Rewrite chuyển đổi từ một địa chỉ website động sang địa chỉ tĩnh.
+* Quy luật chuyển đổi phân tích địa chỉ website được client gởi đến và dịch sang một địa chỉ mới trước khi thể hiện trên trình duyệt.
+
+Ví dụ: Mod_Rewrite chuyển đổi một địa chỉ động:
 từ yourdomain.com/article.php?day=20&month=aug&year=2007
 sang yourdomain.com/article-20-aug-2007.htm
 
+* Bật module
+```sh
+a2enmod rewrite
+```
 
-
+* Để sử dụng mod_rewrite với files .htaccess, cần phải chỉnh sửa file **apache2.conf**. Sửa giá trị thành:
+```sh
+<Directory "/var/www/html">
+    AllowOverride All
+</Directory>
+```
+* Khởi động lại apache2
+```sh
+service apache2 restart
+```
 
 
 ##3. Enabling module userdir.

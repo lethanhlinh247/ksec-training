@@ -1,7 +1,43 @@
 #Apache
 Apache là một phần mềm Webserver mã nguồn mở, rất phổ biến trên thế giới hiện nay.
+##1. Cài đặt Apache
+```sh
+apt-get install apache2
+```
+hoặc, có thể vào trang chủ (http://apache.org) ,  tải file cài đặt apache và tiến hành cài đặt.
+* Chạy apache2.
+```sh
+/etc/init.d/apache2 start
+service apache2 start
+```
+* Dừng apache
+```sh
+/etc/init.d/apache2 stop
+service apache2 stop
+```
+* Khởi động lại apache
+```sh
+sudo /etc/init.d/apache2 restart
+service apache2 restart
+```
+* Không muốn Apache tự khởi động cùng hệ thống:
+```sh
+update-rc.d -f apache2 remove
+```
+* Khởi động apache cùng hệ thống:
+```sh
+update-rc.d apache2 defaults
+```
+* Bật module
+```sh
+a2enmod ten_module
+```
+* Tắt module
+```sh
+a2dismod ten_module
+```
 
-##1
+
 ![](http://www.opensourceforu.efytimes.com/wp-content/uploads/2010/08/figure-1-Apache-web-architecture-590x435.jpg)
 
 ###1.1 Apache core được tổ chức như sau:
@@ -15,6 +51,7 @@ Apache là một phần mềm Webserver mã nguồn mở, rất phổ biến tr�
 ###1.2 Request processing – luồng request, cách xử lý một request từ phía client của webserver apache
 
 Khi có một request từ phía client đến, webserver apache sẽ thực hiện xử lý các công việc theo trình tự sau:
+
     * Phân giải địa chỉ
     * Kiểm tra truy cập và cấp quyền truy cập đến những tài nguyên cần thiết
     * Xác định MIME (Multipurpose Internet Mail Extensions) của đối tượng truy vấn. Tức là thông tin về kiểu định dạng của tài nguyên trên server được gọi tên trong gói HTTP Request
@@ -41,7 +78,7 @@ Trong webserver apache, các modules không giao tiếp trực tiếp với nhau
 * Các mdoul được cài đặt sẵn trong quá trinh buil Apache, hoặc có thể add thêm.
 * Mặc định sẵn sẽ có các modules như sau – các modul này sẽ hoạt động lần lượt theo request của người dùng (6 bước, xem lại ở mục 2 – request processing)
 
-    * Chuyển đổi giữa các URI thành filename trên server:
+    * Chuyển đổi giữa các URL thành filename trên server:
         * **Mod_userdir:** chuyển thư mục home cho từng user
         * **Mod_rewrite:** điều chỉnh lại đường dẫn URL
     * Giai đoạn Xác thực/ Phân quyền:
@@ -163,57 +200,7 @@ Có 2 khái niệm về khả năng xử lý của webserver
 
 => Đánh giá chung: Thread thì tiết kiệm tài nguyên hơn là Process. Nhưng còn tùy thuộc vào các yếu tố khác nhau, ví dụ PHP thì nên dùng Prefork, vì nó không ổn định với hình thức chia sẻ bộ nhớ chung (Process thì sẽ tạo tài nguyên riêng cho từng process, nên sẽ không bị ảnh hưởng khi dùng PHP). (Thread dùng chung bộ nhớ, tài nguyên là ảnh hưởng)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-##1. Cài đặt Apache
-```sh
-apt-get install apache2
-```
-hoặc, có thể vào trang chủ (http://apache.org) ,  tải file cài đặt apache và tiến hành cài đặt.
-* Chạy apache2.
-```sh
-/etc/init.d/apache2 start
-service apache2 start
-```
-* Dừng apache
-```sh
-/etc/init.d/apache2 stop
-service apache2 stop
-```
-* Khởi động lại apache
-```sh
-sudo /etc/init.d/apache2 restart
-service apache2 restart
-```
-* Không muốn Apache tự khởi động cùng hệ thống:
-```sh
-update-rc.d -f apache2 remove
-```
-* Khởi động apache cùng hệ thống:
-```sh
-update-rc.d apache2 defaults
-```
-* Bật module
-```sh
-a2enmod ten_module
-```
-* Tắt module
-```sh
-a2dismod ten_module
-```
-
-##2. Cấu hình apache
+###1.8 Các file cấu hình apache
 Các file cấu hình của apache được đặt tại /etc/apache2
 
 * /var/www/html : Thư mục mặc định chứa website
@@ -227,47 +214,22 @@ Các file cấu hình của apache được đặt tại /etc/apache2
 * ports.conf: chứa thông tin về cổng mà apache2 sẽ lắng nghe.
 * envars: chứa các biến môi trường.
 
-
-
-###2.1 Không hiển thị phiên bản apache.
-
-Mở file */etc/apache2/conf-enabled/security.conf*:
-
-	* **ServerTokens Prod:** Hiển thị "Server: Apache"
-    * **ServerTokens Major:** Hiển thị "Server: Apache/2
-    * **ServerTokens Minor:** Hiển thị "Server: Apache / 2.2″
-    * **ServerTokens Min:** Hiển thị "Server: Apache/2.2.17″
-    * **ServerTokens OS:** Hiển thị "Server: Apache/2.2.17 (Unix)”
-    * **ServerTokens Full:** Hiển thị "Server: Apache/2.2.17 (Unix) PHP/5.3.5″ (Nếu bạn không chỉ định bất kỳ giá trị ServerTokens, đây là mặc định)
-
-###2.2 Thêm các định dạng file index. (add file name that it can access only with directory's name)
-
-Chỉnh sửa file **/etc/apache2/mods-enabled/dir.conf**
-```sh
-DirectoryIndex index.html index.htm
-```
-###2.3 Thay đổi email người quản lý trang web.
-
-Chỉnh sửa file **/etc/apache2/sites-enabled/000-default.conf**
-```sh
-ServerAdmin webmaster@server.world
-```
-###2.4 Cấu hình file apache2.conf
+###1.9 Cấu hình file apache2.conf
 
 * **#ServerRoot "/etc/apache2":** Cấu hình thư mục lưu trữ chính của Apache.
 * **PidFile ${APACHE_PID_FILE}:** Chỉ đường dẫn đến file httpd.pid, là file lưu trữ process ID của Apache mỗi khi khởi chạy. 
 * **Timeout 300:** Thời gian timeout cho hệ thống.
 * **KeepAlive On:**  Là một hình thức có thể giúp tăng tốc độ tải trang khi không mở kết nối cho từng request một.
-* **MaxKeepAliveRequests 100:** Số requests tối đa.
+* **MaxKeepAliveRequests 100:** Số requests tối đa trong 1 connect.
 * **KeepAliveTimeout 5:**  Khoảng thời gian timeout để đợi request tiếp theo từ cùng 1 người dùng trên cùng 1 kết nối.
 * **ErrorLog ${APACHE_LOG_DIR}/error.log:** Đường dẫn file log.
 * **Include ports.conf:** Cấu hình các cổng lắng nghe, ờ file ports.conf
 
 
-##4. Configure virtual hostings. 
+##2. Configure virtual hostings. 
 * Virtual Host là tính năng của Apache giúp ta duy trì nhiều hơn một web server trên một máy tính.
 Nhiều tên cùng chia sẻ một địa chỉ IP gọi là named-based virtual hosting, và sử dụng những địa chỉ IP khác nhau cho từng domain gọi là IP-based virtual hosting. 
-###4.1 Named-based virtual hosting
+###2.1 Named-based virtual hosting
 * Nhiều website sử dụng chung 1 IP. Server sẽ phân tích http header từ client yêu cầu để ánh xạ đến đúng website được chỉ định theo tên miền.
 * Vì vậy Name-Based rất được ưa chuộng dùng để quản lý nhiều website trên cùng 1 máy chủ và trong thời buổi thế giới đang cạn kiệt IP Public cũng như sử dụng tối đang tài nguyên sẵn có.*
 * Nhược điểm lớn nhất là khi IP dùng chung gặp vấn đề thì tất cả các website bên trong đều sẽ bị ảnh hưởng.
@@ -292,7 +254,7 @@ cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/le
 sudo a2ensite lethanhlinh.com.conf    => Lệnh này apache sẽ tạo 1 file trong sites-enabled và file này symlink đến file lethanhlinh.com.conf trong sites-avilable.
 service apache2 restart
 ```
-###4.2  Ip-base virtual hosting
+###2.2  Ip-base virtual hosting
 *  Một IP sử dụng cho 1 Website. Web Server sẽ ánh xạ IP được yêu cầu đến đúng website mong muốn.
 * Nên mỗi website sẽ được định nghĩa bởi 1 IP duy nhất giúp giảm thiểu tối đa sự cố xảy ra cho Website liên quan đến địa chỉ IP. Tuy nhiên IP-Based (dùng trên 1 máy chủ) cần thiết lập Virtual Interface trên 1 máy chủ để có thể sử dụng được nhiều IP.
 * Tuy nhiên, nó sẽ bất lợi hơn nếu so sánh với Name-Based Virtual Hosts.
@@ -316,7 +278,3 @@ cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/le
 sudo a2ensite nhoclinh.com.conf    => Lệnh này apache sẽ tạo 1 file trong sites-enabled và file này symlink đến file lethanhlinh.com.conf trong sites-avilable.
 service apache2 restart
 ```
-##5. Configure SSL.
-##6. Enable Basic Authentication.
-##7. Limit accesses on specific web pages and use OS users for authentication with SSL connection. 
-
