@@ -98,6 +98,7 @@ CREATE TABLE SINHVIEN(
 * Giá trị mặc định tức là khi bạn tạo một record mới mà bạn không nhập dữ liệu vào thì mặc nhiên nó sẽ lấy giá trị mặc định đó làm giá trị. Để gán giá trị mặc định thì ta sẽ dùng từ khóa DEFAULT đằng sau mỗi fields.
 
 * Ví dụ:
+
 ```sh
 USE QLSV; 
  
