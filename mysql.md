@@ -69,6 +69,7 @@ CREATE TABLE [IF NOT EXISTS] table_name(
 ) ENGINE=table_type
 ```
 Trong đó:
+
     * CREATE TABLE: là từ khóa tạo bảng
     * [IF NOT EXISTS]: dòng này có thể có hoặc không, ý nghĩa của nó là nếu table này chưa tồn tại thì thực hiện tạo, còn nếu tồn tại rồi thì không tạo mới.
     * column_list: là danh sách các fields, ví dụ như TenSV, MaSV, ... Mỗi field gồm hai thông số là tên field và kiểu dữ liệu cho nó, nếu có nhiều field thì sẽ dùng dấu phảy (,) để ngăn cách.
