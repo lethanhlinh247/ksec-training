@@ -1,4 +1,16 @@
 # MYSQL
+MySQL là hệ quản trị cơ sở dữ liệu tự do nguồn mở phổ biến nhất thế giới và được các nhà phát triển rất ưa chuộng trong quá trình phát triển ứng dụng.
+
+Vì MySQL là cơ sở dữ liệu tốc độ cao, ổn định và dễ sử dụng, có tính khả chuyển, hoạt động trên nhiều hệ điều hành cung cấp một hệ thống lớn các hàm tiện ích rất mạnh.
+
+Với tốc độ và tính bảo mật cao, MySQL rất thích hợp cho các ứng dụng có truy cập CSDL trên internet.
+
+MySQL miễn phí hoàn toàn 
+
+MySQL là một trong những ví dụ rất cơ bản về Hệ Quản trị Cơ sở dữ liệu quan hệ sử dụng Ngôn ngữ truy vấn có cấu trúc (SQL).
+
+MySQL được sử dụng cho việc bổ trợ PHP, Perl, và nhiều ngôn ngữ khác, nó làm nơi lưu trữ những thông tin trên các trang web viết bằng PHP hay Perl,...
+
 ##1. Cài đặt và cấu hình
 ```sh
 apt-get install mysql-server
@@ -367,7 +379,7 @@ FLUSH PRIVILEGES;
 ```
 Các thay đổi của bạn bây giờ sẽ có hiệu lực !
 
-###7.1  Gán quyền cho User
+###7.2  Gán quyền cho User
 * Dưới đây là danh sách các lệnh thường dùng để gán quyền cho user mới.
 
 * **ALL PRIVILEGES:** như ở trên ta thấy, lệnh này cho phép MySQL user thực hiện toàn quyền trên databases (hoặc 1 vài db được thiết lập)
