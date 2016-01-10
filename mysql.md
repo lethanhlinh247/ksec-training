@@ -1,7 +1,49 @@
 # MYSQL
-##1. Cài đặt
+##1. Cài đặt và cấu hình
 ```sh
 apt-get install mysql-server
+```
+* Thư mục cấu hình của mysql:  **/etc/mysql**
+* file mysqldump.cnf nằm trong thư mục conf.d có 1 tùy chọn là
+	```sh
+	max_allowed_packet      = 16M
+	```
+	Giá trị này dùng để xác định giá trị tối đa của packet.
+* Cấu hình file mysqld.cnf trong thư mục mysql.conf.d
+
+```sh
+[mysqld_safe]
+socket          = /var/run/mysqld/mysqld.sock	//Xác định đường dẫn file socket của mysql. mysql.sock là một UNIX domain socket.
+nice            = 0
+[mysqld]
+
+user            = mysql	//user
+pid-file        = /var/run/mysqld/mysqld.pid	//file có nội dung chứa process id của mysql
+socket          = /var/run/mysqld/mysqld.sock	//Xác định đường dẫn file socket của mysql
+port            = 3306							//port mysql.
+basedir         = /usr							//thư mục...
+datadir         = /var/lib/mysql				//thư mục chứa đường dẫn file database.
+tmpdir          = /tmp							//thư mục tạm
+lc-messages-dir = /usr/share/mysql				//thư mục...
+skip-external-locking
+
+bind-address            = 0.0.0.0	//nếu muốn truy cập mysql-server từ ngoài, bạn phải chuyển địa chỉ này thành 0.0.0.0
+key_buffer_size         = 16M	//
+max_allowed_packet      = 16M	//giá trị tối đa của packet
+thread_stack            = 192K	//
+thread_cache_size       = 8		//
+
+myisam-recover         = BACKUP
+max_connections        = 100	//số connect tối đa
+
+query_cache_limit       = 1M	//kích thước tối đa 1 query :v
+query_cache_size        = 16M	//kích thước bộ nhớ cache của query
+
+log_error = /var/log/mysql/error.log	//đường dẫn file log
+
+expire_logs_days        = 10	//thời gian hết hạn file log.
+max_binlog_size   = 100M		//kích thước file binlog tối đa.
+
 ```
 ##2. MySQL Data Types
 ###2.1 Kiểu dữ liệu số (Numeric Data Types)
@@ -156,7 +198,9 @@ CREATE TABLE users (
 ```sh
 ALTER TABLE table_name ADD PRIMARY KEY(primary_key_column);
 ```
+
 * Ví dụ:
+
 ```sh
 CREATE TABLE users (
   id INT(10) UNSIGNED NOT NULL,
@@ -167,6 +211,7 @@ ALTER TABLE users ADD PRIMARY KEY(id);
 ```
 ####4.5.3 Sử dụng CONSTRAINT đặt tên cho khóa chính
 * Sử dụng lệnh CONSTRAINT chúng ta có thể tạo tên cho khóa chính, nhờ đó sau này ta sẽ dễ quản lý hơn. Ví dụ:
+
 ```sh
 CREATE TABLE users (
   id INT(10) UNSIGNED NOT NULL,
@@ -175,6 +220,7 @@ CREATE TABLE users (
 ) ENGINE = INNODB;
 ```
 hoặc
+
 ```sh
 CREATE TABLE users (
   id INT(10) UNSIGNED NOT NULL,
@@ -297,4 +343,112 @@ Ví dụ: Lấy danh sách sinh viên trong bảng SINHVIEN và sắp xếp theo
 SELECT MaSV, TenSV, NamSinh
 FROM SINHVIEN
 ORDER BY MaSV ASC, NamSinh DESC
+```
+
+##7. Quản lý user.
+###7.1 Tạo user mới
+Chúng ta tạo user mới trong tình huống cần hạn chế một vài quyền, có nhiều cách để tạo ra user với các quyền là tùy chỉnh.
+
+* Lệnh sau tạo ra user mới có tên là newuser, passowrd là newuser trên localhost:
+```sh
+CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'newuser';
+```
+* Tuy nhiên, tại thời điểm này, newuser không có quyền để làm bất cứ điều gì với cơ sở dữ liệu. Thực tế thì, thậm chí nếu newuser cố gắng thử đăng nhập (với mật khẩu là password), họ cũng không thể vào được shell điều khiển của MySQL.
+
+Vì vậy, điều đầu tiên cần làm là cung cấp cho người dùng truy cập vào các thông tin mà họ cần:
+```sh
+GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
+```
+Các dấu sao (*) trong lệnh này liên quan đến cơ sở dữ liệu và bảng (tương ứng) mà họ có thể truy cập – cụ thể lệnh này cho phép người dùng đọc, chỉnh sửa, ,thực thi tất cả các task trên tất cả cơ sở dữ liệu và bảng.
+
+* Một khi hoàn tất các quyền gán cho user, và bạn muốn thiết lập quyền mới cho tài khoản mới khác, hãy thực hiện lệnh sau để đảm bảo các quyền được thiết lập lại từ đầu cho user mới.
+```sh	
+FLUSH PRIVILEGES;
+```
+Các thay đổi của bạn bây giờ sẽ có hiệu lực !
+
+###7.1  Gán quyền cho User
+* Dưới đây là danh sách các lệnh thường dùng để gán quyền cho user mới.
+
+* **ALL PRIVILEGES:** như ở trên ta thấy, lệnh này cho phép MySQL user thực hiện toàn quyền trên databases (hoặc 1 vài db được thiết lập)
+* **CREATE:** Cho phép user tạo mới tables hoặc databases
+* **DROP:** Cho phép xóa tables hoặc databases
+* **DELETE:** Cho phép xóa bản ghi dữ liệu trong bảng tables
+* **INSERT:** Cho phép thêm bản ghi mới vào bảng csdl
+* **SELECT:** Cho phép sử dụng lệnh Select để tìm kiếm dữ liệu
+* **UPDATE:** Cho phép cập nhật csdl
+* **GRANT OPTION:** Cho phép gán hoặc xóa quyền của người dùng khác.
+
+* Để thiết lập quyền người dùng với môt vài quyền cụ thể, hãy dùng mẫu lệnh sau:
+```sh
+GRANT [type of permission] ON [database name].[table name] TO '[username]'@'localhost';
+```
+Nếu bạn muốn cho phép user truy cập tất cả databases hoặc tất cả bảng, hãy dùng dấu sao (*) thay cho tên database hoặc table.
+
+* Mỗi lần bạn cập nhật hay thay đổi quyền hãy dùng lệnh Flush Privileges đảm bảo các thay đổi có hiệu lực.
+```sh
+FLUSH PRIVILEGES;
+```
+
+* Nếu cần thu hồi lại quyền của user, hãy dùng lệnh REVOKE với biểu mẫu lệnh sau đây:
+```sh
+REVOKE [type of permission] ON [database name].[table name] FROM '[username]'@'localhost';
+```
+Hoặc bạn cũng có thể dùng lệnh drop để xóa hẳn user đó đi.
+```sh	
+DROP USER 'demo'@'localhost';
+```
+
+##8. Enable Remote Access To MySQL Database Server
+* Bước 1: Chỉnh sửa file my.cnf.
+
+If you are using Debian Linux file is located at /etc/mysql/my.cnf location.
+
+If you are using Red Hat Linux/Fedora/Centos Linux file is located at /etc/my.cnf location.
+
+If you are using FreeBSD you need to create a file /var/db/mysql/my.cnf location
+	
+Trong file my.cnf, tìm phần 
+```sh
+bind-address=YOUR-SERVER-IP
+```
+và sửa thành địa chỉ ip của MySQL SERVER hoặc 0.0.0.0
+
+Sau đó lưu lại và khởi động lại dịch vụ mysql server
+```sh
+service mysql restart
+```
+* Bước 2: Mở port 3306.
+Nếu tường lửa đang chặn port 3306 thì các bạn phải mở port mới có thể truy nhập database từ xa.
+
+Với tường lửa iptables, có thể dùng lệnh dưới đây
+```sh
+iptables -A INPUT -i eth0 -p tcp --destination-port 3306 -j ACCEPT
+```
+
+* Bước 3:  Phân quyền remote database
+* Phân quyền remote database cho database mới
+```sh
+CREATE DATABASE ksec;	//tạo database ksec
+GRANT ALL ON ksec.* TO ksec@'10.10.10.4' IDENTIFIED BY 'PASSWORD_ksec'	//để phân quyền cho user test có host là 10.10.10.4 được toàn quyền thao tác trên database ksec.  ( Host chính là ip của client remote vào database, có thể để host = % để cho tất cả ip từ client có thể remote vào database)
+
+* Phân quyền remote database cho database đã có.
+```sh
+update db set Host='10.10.10.4' where Db='ksec';	//để cập nhật lại ip cho phần host là 10.10.10.4 cho database ksec.
+update user set Host='10.10.10.4' where user='ksec';  để cập nhật lại phần host là 10.10.104 cho user ksec.
+```
+
+* Bước 4: Remote vào database.
+Tại server điều khiển:
+```sh
+mysql -u user -h ip_server_database -p
+```
+Các thông số:
+    * u user là username của mysql
+    * h ip_server là địa chỉ ip của server bị remote.
+    * p là chỉ định mật khẩu của user sẽ nhập sau khi chạy lệnh trên.
+
+	Ví dụ:
+```sh
+mysql -h ksec -h 10.10.10.6 -p
 ```
