@@ -443,11 +443,13 @@ iptables -A INPUT -i eth0 -p tcp --destination-port 3306 -j ACCEPT
 ```sh
 CREATE DATABASE ksec;	//tạo database ksec
 GRANT ALL ON ksec.* TO ksec@'10.10.10.4' IDENTIFIED BY 'PASSWORD_ksec'	//để phân quyền cho user test có host là 10.10.10.4 được toàn quyền thao tác trên database ksec.  ( Host chính là ip của client remote vào database, có thể để host = % để cho tất cả ip từ client có thể remote vào database)
-
+FLUSH PRIVILEGES;
+```
 * Phân quyền remote database cho database đã có.
 ```sh
-update db set Host='10.10.10.4' where Db='ksec';	//để cập nhật lại ip cho phần host là 10.10.10.4 cho database ksec.
-update user set Host='10.10.10.4' where user='ksec';  để cập nhật lại phần host là 10.10.104 cho user ksec.
+CREATE USER 'user'@'ip remote' IDENTIFIED BY 'password';
+use mysql;
+GRANT ALL PRIVILEGES ON [database].[table_name] TO 'user'@'ip remote';
 ```
 
 * Bước 4: Remote vào database.
@@ -462,5 +464,5 @@ Các thông số:
 
 	Ví dụ:
 ```sh
-mysql -h ksec -h 10.10.10.6 -p
+mysql -u ksec -h 10.10.10.6 -p
 ```
