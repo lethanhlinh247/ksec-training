@@ -49,9 +49,9 @@ Client chỉ bắt đầu một phiên giao dịch
 ###1.2 Dạng thức của dữ liệu
 Có hai chế độ được dùng để truyền tải dữ liệu qua mạng lưới truyền thông: 
    
-   * Chế độ ASCII
+	* Chế độ ASCII
 
-    * Chế độ Nhị phân
+	* Chế độ Nhị phân
 	
 Hai chế độ này khác nhau trong cách chúng gửi dữ liệu: 
 * **Chế dộ ASCII:** Khi một tập tin được truyền dùng chế độ ASCII, mỗi một chữ, mỗi con số, và mỗi ký tự đều được gửi trong dạng mã ASCII. Máy nhận tin lưu trữ chúng trong một tập tin văn bản thường, dưới dạng thức thích hợp (chẳng hạn, một máy dùng Unix sẽ lưu trữ nó trong dạng thức của Unix, một máy dùng Macintosh sẽ lưu trữ nó trong dạng thức của Mac).
