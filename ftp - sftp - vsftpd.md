@@ -122,7 +122,7 @@ local_enable=YES		//Cho phép người dùng cục bộ truy cập
 
 write_enable=YES		//Cho phép quyền ghi.
 
-#local_umask=022		//Default umask .
+local_umask=022		//Default umask .
 
 anon_upload_enable=YES		//cho phép mọi người upload file
 
@@ -139,41 +139,40 @@ connect_from_port_20=YES	//Cho phép kết nối data qua port 20
 # If you want, you can arrange for uploaded anonymous files to be owned by
 # a different user. Note! Using "root" for uploaded files is not
 # recommended!
-#chown_uploads=YES
-#chown_username=whoever
+chown_uploads=YES
+chown_username=whoever
 
-#xferlog_file=/var/log/vsftpd.log		//Đường dẫn file log.
+xferlog_file=/var/log/vsftpd.log		//Đường dẫn file log.
 
-#xferlog_std_format=YES		/format log.
+xferlog_std_format=YES		/format log.
 
-#idle_session_timeout=600		//Thời gian timeout cho 1 connection, được tính bằng giây
+idle_session_timeout=600		//Thời gian timeout cho 1 connection, được tính bằng giây
 
-#data_connection_timeout=120	//Thời gian tối đa để thực hiện việc truyền dữ liệu, quá thời gian này sẽ bị cắt khi truyền. Tính bằng giây. 
-#
+data_connection_timeout=120	//Thời gian tối đa để thực hiện việc truyền dữ liệu, quá thời gian này sẽ bị cắt khi truyền. Tính bằng giây. 
+
 # It is recommended that you define on your system a unique user which the
 # ftp server can use as a totally isolated and unprivileged user.
-#nopriv_user=ftpsecure
+nopriv_user=ftpsecure
 #
 # Enable this and the server will recognise asynchronous ABOR requests. Not
 # recommended for security (the code is non-trivial). Not enabling it,
 # however, may confuse older FTP clients.
-#async_abor_enable=YES
-#
+async_abor_enable=YES
 
-#ascii_upload_enable=YES	//Cho phép upload
+ascii_upload_enable=YES	//Cho phép upload
 
-#ascii_download_enable=YES	// Cho phép download
+ascii_download_enable=YES	// Cho phép download
 
-#ftpd_banner=Welcome to blah FTP service.	// lời chào khi đăng nhập :v
+ftpd_banner=Welcome to blah FTP service.	// lời chào khi đăng nhập :v
 
-#deny_email_enable=YES		//từ chối email
+deny_email_enable=YES		//từ chối email
 
-#banned_email_file=/etc/vsftpd.banned_emails	//danh sách email bị banned.
+banned_email_file=/etc/vsftpd.banned_emails	//danh sách email bị banned.
 
 # You may restrict local users to their home directories.  See the FAQ for
 # the possible risks in this before using chroot_local_user or
-# chroot_list_enable below.
-#chroot_local_user=YES		//tất cả người dùng có trong hệ thống sẽ chỉ có quyền truy cập đối với thư mục home của user đó mà không truy cập được vào bất kỳ phần nào khác của máy chủ.
+chroot_list_enable below.
+chroot_local_user=YES		//tất cả người dùng có trong hệ thống sẽ chỉ có quyền truy cập đối với thư mục home của user đó mà không truy cập được vào bất kỳ phần nào khác của máy chủ.
 #
 # You may specify an explicit list of local users to chroot() to their home
 # directory. If chroot_local_user is YES, then this list becomes a list of
@@ -181,16 +180,16 @@ connect_from_port_20=YES	//Cho phép kết nối data qua port 20
 # (Warning! chroot'ing can be very dangerous. If using chroot, make sure that
 # the user does not have write access to the top level directory within the
 # chroot)
-#chroot_local_user=YES
-#chroot_list_enable=YES
+chroot_local_user=YES
+chroot_list_enable=YES
 # (default follows)
-#chroot_list_file=/etc/vsftpd.chroot_list
+chroot_list_file=/etc/vsftpd.chroot_list
 #
 # You may activate the "-R" option to the builtin ls. This is disabled by
 # default to avoid remote users being able to cause excessive I/O on large
 # sites. However, some broken FTP clients such as "ncftp" and "mirror" assume
 # the presence of the "-R" option, so there is a strong case for enabling it.
-#ls_recurse_enable=YES
+ls_recurse_enable=YES
 #
 # Customization
 #
