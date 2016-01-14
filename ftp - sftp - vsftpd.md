@@ -48,7 +48,8 @@ Client chỉ bắt đầu một phiên giao dịch
 
 ###1.2 Dạng thức của dữ liệu
 Có hai chế độ được dùng để truyền tải dữ liệu qua mạng lưới truyền thông: 
-    * Chế độ ASCII
+   
+   * Chế độ ASCII
 
     * Chế độ Nhị phân
 	
