@@ -245,13 +245,11 @@ Vì cho phép database thực thi ngay trên bộ nhớ nên BalanceNG sử dụ
 
 Homepage:http://www.inlab.de/balanceng/
 
-###7.5 Pound
-
-
-### MultiLoad
+###7.5 MultiLoad
 MultiLoad là một load balancer cho phép redirects các HTTP requests đến các server có sẵn.
 
 Đó là giải pháp để cân bằng lượng tải và giấu đi vị trí thật của server.
 
 Các servers có mức độ ưu tiên khác nhau với traffic đang hoạt động.
 
+###7.6 Pound
