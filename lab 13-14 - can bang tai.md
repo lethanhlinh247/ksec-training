@@ -8,7 +8,7 @@ Test khả năng sẵn sàng, hiệu năng.. (các công cụ ab, jmeter)
 Viết script tối ưu nhất
 ```
 ##Mô hình
-![](http://i.imgur.com/qsbsc40.jpg)
+![](http://i.imgur.com/I5eP7LW.jpg)
 ```sh
 10.10.10.4 - DNS Server
 10.10.10.100 - Load balancer sử dụng HAproxy.
