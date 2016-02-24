@@ -101,13 +101,10 @@ global
 ```
 * `log`: Cấu hình log của HAProxy
 * `chroot`: Phân quyền cho thư mục haproxy
-* `stats socket`:
-* `stats timeout`: 
 * `	user haproxy
 	group haproxy`
 Tên user và group  của haproxy. không nên thay đổi.
-* `daemon`: 
-* Những dòng còn lại liên quan đến phần cấu hình SSL.
+* Các câu lệnh dưới liên quan đến phần cấu hình SSL.
 
 ### Phần Default
 ```sh
@@ -153,7 +150,6 @@ backend web_backend 10.10.10.100:80
 	server web2 10.10.10.10:80 check`: Có 2 server backend là web1, web2 với địa chỉ ip tương ứng. Tùy chọn `check` dùng để kiểm tra kết nối đến các server đó. 
 * `stats enable`: Bật xem thống kê trên web.
 * `stats uri /haproxy?stats`: đường dẫn xem thống kê.
-* `stats realm Strictly\ Private`: 
 * `stats auth adk:votinhkhoc`: tên đăng nhập và mật khẩu để xem thống kê.
 
 ###Cấu hình frontend
