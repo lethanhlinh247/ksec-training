@@ -137,14 +137,13 @@ Replace the usernames and passwords in "stats auth". This will make HAProxy list
 http://<Public IP of Load Balancer>:8080/
 ```
 
+
+![](http://i.imgur.com/EiibWva.png)
+
 * Once you're done configuring start the HAProxy service.
 ```sh
 service haproxy restart
 ```
-
-![](http://i.imgur.com/EiibWva.png)
-
-
 * Use the mysql client to query HAProxy.
 
 ```sh
