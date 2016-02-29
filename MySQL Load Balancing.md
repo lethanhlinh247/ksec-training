@@ -79,7 +79,7 @@ Usage: /etc/init.d/haproxy {start|stop|reload|restart|status}
 
 ##4 Configuring HAProxy
 
-*Rename the original configuration file
+* Rename the original configuration file
 ```sh
 mv /etc/haproxy/haproxy.cfg{,.original}
 ```
@@ -133,13 +133,18 @@ listen 0.0.0.0:8080
 ```
 Replace the usernames and passwords in "stats auth". This will make HAProxy listen on port 8080 for HTTP requests and the statistics will be protected with HTTP Basic Authentication. So you can access stats at
 
+
+![](http://i.imgur.com/EiibWva.png)
+
+
+
 ```sh
 http://<Public IP of Load Balancer>:8080/
 ```
 
 * Once you're done configuring start the HAProxy service.
 ```sh
-service haproxy start
+service haproxy restart
 ```
 
 * Use the mysql client to query HAProxy.
