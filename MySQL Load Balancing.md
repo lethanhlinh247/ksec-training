@@ -133,11 +133,6 @@ listen 0.0.0.0:8080
 ```
 Replace the usernames and passwords in "stats auth". This will make HAProxy listen on port 8080 for HTTP requests and the statistics will be protected with HTTP Basic Authentication. So you can access stats at
 
-
-![](http://i.imgur.com/EiibWva.png)
-
-
-
 ```sh
 http://<Public IP of Load Balancer>:8080/
 ```
@@ -146,6 +141,9 @@ http://<Public IP of Load Balancer>:8080/
 ```sh
 service haproxy restart
 ```
+
+![](http://i.imgur.com/EiibWva.png)
+
 
 * Use the mysql client to query HAProxy.
 
