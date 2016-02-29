@@ -1,9 +1,13 @@
-Prelude
+#MySQL Load Balancing
 
-HAProxy is an open source software which can load balance HTTP and TCP servers. In the previous article on HAProxy we configured load balancing for HTTP and in this one we'll do the same for MySQL. All your MySQL servers have to be configured to perform Master-Master replication as load balancing involves both reading and writing to all the backends.
+HAProxy is an open source software which can load balance HTTP and TCP servers.
+
+In the previous article on HAProxy we configured load balancing for HTTP and in this one we'll do the same for MySQL.
+
+All your MySQL servers have to be configured to perform **Master-Master** replication as load balancing involves both reading and writing to all the backends.
 
 The following three droplets will be used in this article:
-
+```sh
 Droplet 1 - Load Balancer
 Hostname: haproxy
 OS: Ubuntu Private IP: 10.0.0.100
@@ -15,65 +19,77 @@ OS: Debian 7 Private IP: 10.0.0.1
 Droplet 2 - Node 2
 Hostname: mysql-2
 OS: Debian 7 Private IP: 10.0.0.2
+```
 
 Before proceeding, make sure all MySQL servers are up, running and are properly replicating database writes.
-Prepare MySQL Servers
 
-We need to prepare the MySQL servers by creating two additional users for HAProxy. The first user will be used by HAProxy to check the status of a server.
+##1: Prepare MySQL Servers
+
+We need to prepare the MySQL servers by creating two additional users for HAProxy.
+
+* The first user will be used by HAProxy to check the status of a server.
 
 ```sh
 root@mysql-1# mysql -u root -p -e "INSERT INTO mysql.user (Host,User) values ('10.0.0.100','haproxy_check'); FLUSH PRIVILEGES;"
 ```
 
-A MySQL user is needed with root privileges when accessing the MySQL cluster from HAProxy. The default root user on all the servers are allowed to login only locally. While this can be fixed by granting additional privileges to the root user, it is better to have a separate user with root privileges.
+A MySQL user is needed with root privileges when accessing the MySQL cluster from HAProxy.
+
+The default root user on all the servers are allowed to login only locally.
+
+* While this can be fixed by granting additional privileges to the root user, it is better to have a separate user with root privileges.
+
 ```sh
 root@mysql-1# mysql -u root -p -e "GRANT ALL PRIVILEGES ON *.* TO 'haproxy_root'@'10.0.0.100' IDENTIFIED BY 'password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 ```
-Replace haproxy_root and password with your own secure values. It is enough to execute these queries on one MySQL master as changes will replicate to others.
-Install MySQL Client
 
-MySQL client has to be installed on the HAProxy droplet to test connectivity.
+Replace haproxy_root and password with your own secure values. It is enough to execute these queries on one MySQL master as changes will replicate to others.
+
+##2 Install MySQL Client
+
+* MySQL client has to be installed on the HAProxy droplet to test connectivity.
 ```sh
 root@haproxy# apt-get install mysql-client
 ```
 
-Now try executing a query on one of the masters as the haproxy_root user.
+* Now try executing a query on one of the masters as the haproxy_root user.
 ```sh
 root@haproxy# mysql -h 10.0.0.1 -u haproxy_root -p -e "SHOW DATABASES"
 ```
+
 This should display a list of MySQL databases.
 
-Installing HAProxy
+##3 Installing HAProxy
 
-On the HAProxy server install the package.
+* On the HAProxy server install the package.
 ```sh
 root@haproxy# apt-get install haproxy
 ```
 
-Enable HAProxy to be started by the init script.
+* Enable HAProxy to be started by the init script.
 ```sh
 root@haproxy# sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/haproxy
 ```
 
-To check if this change is done properly execute the init script of HAProxy without any parameters.
+* To check if this change is done properly execute the init script of HAProxy without any parameters.
 ```sh
 root@haproxy:~# service haproxy
 Usage: /etc/init.d/haproxy {start|stop|reload|restart|status}
 ```
 
-Configuring HAProxy
+##4 Configuring HAProxy
 
-Rename the original configuration file
+*Rename the original configuration file
 ```sh
 mv /etc/haproxy/haproxy.cfg{,.original}
 ```
 
-Create and edit a new one
+* Create and edit a new one
 ```sh
 nano /etc/haproxy/haproxy.cfg
 ```
 
-The first block is the global and defaults configuration block.
+* The first block is the global and defaults configuration block.
 ```sh
 global
     log 127.0.0.1 local0 notice
@@ -89,7 +105,7 @@ defaults
 ```
 More information about each of these options are covered in this article. Since we've told HAProxy to send log messages to 127.0.0.1 we have to configure rsyslog to listen on it. This has too been covered in the same article under Configure Logging for HAProxy.
 
-Moving to the main configuration part.
+* Moving to the main configuration part.
 
 ```sh
 listen mysql-cluster
@@ -101,9 +117,11 @@ listen mysql-cluster
     server mysql-2 10.0.0.2:3306 check
 ```
 
-Unlike HTTP load balancing HAProxy doesn't have a specific "mode" for MySQL so we use tcp. We've set HAProxy to listen only on the loopback address (assuming that application is on the same server) however if your application resides on a different droplet make it listen on 0.0.0.0 or the private IP address.
+Unlike HTTP load balancing HAProxy doesn't have a specific "mode" for MySQL so we use tcp.
 
-We need one more configuration block to see the statistics of load balancing. This is completely optional and can be omitted if you don't want stats.
+We've set HAProxy to listen only on the loopback address (assuming that application is on the same server) however if your application resides on a different droplet make it listen on 0.0.0.0 or the private IP address.
+
+* We need one more configuration block to see the statistics of load balancing. This is completely optional and can be omitted if you don't want stats.
 ```sh
 listen 0.0.0.0:8080
     mode http
@@ -119,11 +137,12 @@ Replace the usernames and passwords in "stats auth". This will make HAProxy list
 http://<Public IP of Load Balancer>:8080/
 ```
 
-Once you're done configuring start the HAProxy service.
+* Once you're done configuring start the HAProxy service.
 ```sh
 service haproxy start
 ```
-Use the mysql client to query HAProxy.
+
+* Use the mysql client to query HAProxy.
 
 ```sh
 root@haproxy# mysql -h 127.0.0.1 -u haproxy_root -p -e "SHOW DATABASES"
