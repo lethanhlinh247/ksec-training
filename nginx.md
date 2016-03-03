@@ -494,8 +494,8 @@ http {
     #keepalive_timeout  0;
     keepalive_timeout  65;		 #là số giây timeout nếu không có request nào tiếp theo thì connection sẽ được đóng.
 	# Keep alive: http://notes.viphat.work/keep-alive-la-gi-va-lam-the-nao-de-su-dung-no-de-toi-uu-web-performance/
-	# Keep alive: Keep Alive là một phương thức cho phép sử dụng cùng một kết nối TCP cho một chuỗi các phiên giao dịch HTTP
-	#thay vì cứ phải tạo mới từng connection cho mỗi một HTTP Request. 
+	# Keep alive: Keep Alive là một phương thức cho phép sử dụng cùng một kết nối TCP
+	# cho một chuỗi các phiên giao dịch HTTP thay vì cứ phải tạo mới từng connection cho mỗi một HTTP Request. 
 	
 
     #gzip  on;				# Nén gzip
