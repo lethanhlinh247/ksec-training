@@ -458,7 +458,7 @@ Một số mmodules nổi tiếng của bên thứ 3 là:
 * Các module khác bạn có thể tìm thấy ở trang
 https://www.nginx.com/resources/wiki/modules/#
 
-##. Cấu hình nginx với `nginx.conf` ở thư mục `/etc/nginx`
+##4. Cấu hình nginx với `nginx.conf` ở thư mục `/etc/nginx`
 ```sh
 user  nginx;			# user 
 worker_processes  1;		# Nếu cpu bạn có nhiều hơn 1 nhân, hãy thay đổi giá trị này để nginx được tối ưu hơn
@@ -494,7 +494,8 @@ http {
     #keepalive_timeout  0;
     keepalive_timeout  65;		 #là số giây timeout nếu không có request nào tiếp theo thì connection sẽ được đóng.
 	# Keep alive: http://notes.viphat.work/keep-alive-la-gi-va-lam-the-nao-de-su-dung-no-de-toi-uu-web-performance/
-	# Keep alive: Keep Alive là một phương thức cho phép sử dụng cùng một kết nối TCP cho một chuỗi các phiên giao dịch HTTP thay vì cứ phải tạo mới từng connection cho mỗi một HTTP Request. 
+	# Keep alive: Keep Alive là một phương thức cho phép sử dụng cùng một kết nối TCP cho một chuỗi các phiên giao dịch HTTP
+	#thay vì cứ phải tạo mới từng connection cho mỗi một HTTP Request. 
 	
 
     #gzip  on;				# Nén gzip
@@ -617,7 +618,9 @@ If you are the system administrator of this resource then you should check the e
 Faithfully yours, nginx.
 ```
 
-####Chú ý: User và group ở đây chính là user được cấu hình trong file nginx.conf
+#####Chú ý: User và group ở đây chính là user được cấu hình trong file nginx.conf
+
+* Khởi động lại php5-fpm: `service php5-fpm restart`
 
 ###5.3 Cấu hình nginx để chạy php-fpm
 ```
@@ -625,7 +628,7 @@ Faithfully yours, nginx.
         location ~ \.php$ {
                 try_files $uri =404;
                 root	/var/www/html;
-				#fastcgi_pass   127.0.0.1:9000;
+			   #fastcgi_pass   127.0.0.1:9000;
 				fastcgi_pass unix:/var/run/php5-fpm.sock;
                 fastcgi_index index.php;
                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
