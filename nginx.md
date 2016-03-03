@@ -30,30 +30,9 @@ apt-get install nginx
 
 ###2.2 Cài đặt từ source
 ####2.2.1  CÀI ĐẶT THƯ VIỆN
-
-* Cài đặt GCC | - GNU Compiler
 ```sh
-apt-get install build-essential
-```
-
-* Cài đặt thư viện PCRE
-```sh
-apt-get install -y pcre pcre-devel
-```
-
-* Cài đặt thư viện zlib
-```sh
-apt-get install -y zlib zlib-devel
-```
-
-* Cài đặt OpenSSL
-```sh
-apt-get install -y openssl openssl-devel
-```
-
-* Cài đặt các thư viện khác
-```sh
-apt-get install -y libxml2 libxml2-devel libxslt libxslt-devel gd gd-devel perl-ExtUtils-Embed geoip geoip-devel
+sudo apt-get install build-essential libssl-dev libpcre3 libpcre3-dev \
+libxml2-dev libxslt1-dev libgd2-xpm-dev libgeoip-dev libperl-dev
 ```
 
 ####2.2.2 CẤU HÌNH CÀI ĐẶT NGINX
@@ -186,40 +165,113 @@ apt-get install -y libxml2 libxml2-devel libxslt libxslt-devel gd gd-devel perl-
 * Tiến hành cấu hình cài đặt nginx với các tùy chọn ở trên.
 * Ví dụ: 
 ```sh
-# ./configure 
---user=nginx 
---group=nginx 
---conf-path=/etc/nginx/nginx.conf 
---pid-path=/var/run/nginx/nginx.pid 
---lock-path=/var/lock/subsys/nginx 
---with-http_ssl_module 
---with-http_realip_module 
---with-http_addition_module 
---with-http_xslt_module 
---with-http_image_filter_module 
---with-http_geoip_module 
---with-http_sub_module 
---with-http_dav_module 
---with-http_flv_module 
---with-http_mp4_module 
---with-http_gzip_static_module 
---with-http_random_index_module 
---with-http_secure_link_module 
---with-http_stub_status_module 
---with-http_perl_module 
---with-http_degradation_module
+./configure \
+--prefix=/usr/local/nginx \
+--conf-path=/etc/nginx/nginx.conf \
+--error-log-path=/var/log/nginx/error.log \
+--http-client-body-temp-path=/var/lib/nginx/body \
+--http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
+--http-log-path=/var/log/nginx/access.log \
+--http-proxy-temp-path=/var/lib/nginx/proxy \
+--http-scgi-temp-path=/var/lib/nginx/scgi \
+--http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
+--lock-path=/var/lock/nginx.lock \
+--pid-path=/var/run/nginx.pid \
+--with-pcre-jit \
+--with-debug \
+--with-http_addition_module \
+--with-http_dav_module \
+--with-http_geoip_module \
+--with-http_gzip_static_module \
+--with-http_image_filter_module \
+--with-http_realip_module \
+--with-http_stub_status_module \
+--with-http_ssl_module \
+--with-http_sub_module \
+--with-http_xslt_module \
+--with-ipv6 \
+--with-mail \
+--with-mail_ssl_module \
+--with-http_spdy_module
 ```
+
+* Kết quả output ra terminal có thể trông như sau:
+```sh
+Configuration summary
+  + using system PCRE library
+  + using system OpenSSL library
+  + md5: using OpenSSL library
+  + sha1: using OpenSSL library
+  + using system zlib library
+
+
+  nginx path prefix: "/usr/local/nginx"
+  nginx binary file: "/usr/local/nginx/sbin/nginx"
+  nginx configuration prefix: "/etc/nginx"
+  nginx configuration file: "/etc/nginx/nginx.conf"
+  nginx pid file: "/var/run/nginx.pid"
+  nginx error log file: "/var/log/nginx/error.log"
+  nginx http access log file: "/var/log/nginx/access.log"
+  nginx http client request body temporary files: "/var/lib/nginx/body"
+  nginx http proxy temporary files: "/var/lib/nginx/proxy"
+  nginx http fastcgi temporary files: "/var/lib/nginx/fastcgi"
+  nginx http uwsgi temporary files: "/var/lib/nginx/uwsgi"
+  nginx http scgi temporary files: "/var/lib/nginx/scgi"
+```
+
+* Tạo các thư mục tạm (temporary directories) phục vụ cho NginX
+```sh
+mkdir -p /var/lib/nginx/body
+mkdir /var/lib/nginx/proxy
+mkdir /var/lib/nginx/fastcgi
+mkdir /var/lib/nginx/uwsgi
+mkdir /var/lib/nginx/scgi
+```
+
 
 * Biên dịch và cài đặt Nginx
 ```sh
 # make
 # make install
-# export PATH=$PATH:/usr/local/nginx/sbin
 ```
+####2.2.4 Cấu hình và khởi chạy NginX
+* Tạo tài khoản nginx
+```sh
+adduser --system --home=/var/www/ \
+--disabled-login \
+--disabled-password \
+--group nginx
+```
+* Cấu hình NginX bằng việc chỉnh sửa tập tin cấu hình chính như sau: `/etc/nginx/.conf`
+
+	* Đổi user từ `nobody` thành `nginx`
+	* Đường dẫn file error_log: `/var/log/error.log`
+	* Đường dẫn file pid: `/var/run/nginx.pid`
+	* Thêm đường dẫn chứa virtual host
+		```sh
+		include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+		```
+	
+	* thư mục chứ source code mặc định là `/usr/local/nginx/html`
+
+* Tạo biến môi trường để bạn có thể gọi nginx mà không cần phải gõ đường dẫn đầy đủ:
+```sh
+sh -c "echo 'PATH=/usr/local/nginx/sbin:\$PATH' > /etc/profile.d/nginx.sh"
+sh -c "echo 'export PATH' >> /etc/profile.d/nginx.sh"
+ldconfig /usr/local/nginx/sbin/
+```
+
+*  Tạo thư mục lưu trữ các tập tin cấu hình virtual host
+```sh
+mkdir /etc/nginx/sites-available
+mkdir /etc/nginx/sites-enabled
+```
+
 
 * Cấu hình Nginx như là 1 dịch vụ của hệ thống
 
-	* Tạo file  /etc/init.d/nginx để nginx tự động chạy khi hệ thống khởi động. 
+	* Tạo file `nginx` trong thư mục `/etc/init.d/` để nginx tự động chạy khi hệ thống khởi động. 
 	```sh
 	# vi /etc/init.d/nginx
 	```
@@ -227,134 +279,153 @@ apt-get install -y libxml2 libxml2-devel libxslt libxslt-devel gd gd-devel perl-
 	* Nội dung file
 	```sh
 	#!/bin/sh
-	#
-	# nginx - this script starts and stops the nginx daemon
-	#
-	# chkconfig:   - 85 15 
-	# description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
-	#               proxy and IMAP/POP3 proxy server
-	# processname: nginx
-	# config:      /etc/nginx/nginx.conf
-	# config:      /etc/sysconfig/nginx
-	# pidfile:     /var/run/nginx.pid
+	### BEGIN INIT INFO
+	# Provides:          nginx
+	# Required-Start:    $network $remote_fs $local_fs 
+	# Required-Stop:     $network $remote_fs $local_fs
+	# Default-Start:     2 3 4 5
+	# Default-Stop:      0 1 6
+	# Short-Description: Stop/start nginx
+	### END INIT INFO
 
-	# Source function library.
-	. /etc/rc.d/init.d/functions
+	# Author: Sergey Budnevitch <sb@nginx.com>
 
-	# Source networking configuration.
-	. /etc/sysconfig/network
+	PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+	DESC=nginx
+	NAME=nginx
+	CONFFILE=/etc/nginx/nginx.conf
+	#DAEMON=/usr/sbin/nginx
+	DAEMON=/usr/local/nginx/sbin/nginx
+	DAEMON_ARGS="-c $CONFFILE"
+	PIDFILE=/var/run/$NAME.pid
+	SCRIPTNAME=/etc/init.d/$NAME
 
-	# Check that networking is up.
-	[ "$NETWORKING" = "no" ] && exit 0
+	[ -x $DAEMON ] || exit 0
 
-	nginx="/usr/local/nginx/sbin/nginx"
-	prog=$(basename $nginx)
+	[ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
-	NGINX_CONF_FILE="/etc/nginx/nginx.conf"
+	. /lib/init/vars.sh
 
-	[ -f /etc/sysconfig/nginx ] && . /etc/sysconfig/nginx
+	. /lib/lsb/init-functions
 
-	lockfile=/var/lock/subsys/nginx
-
-	make_dirs() {
-	   # make required directories
-	   user=`$nginx -V 2>&1 | grep "configure arguments:" | sed 's/[^*]*--user=\([^ ]*\).*/\1/g' -`
-	   if [ -z "`grep $user /etc/passwd`" ]; then
-		   useradd -M -s /bin/nologin $user
-	   fi
-	   options=`$nginx -V 2>&1 | grep 'configure arguments:'`
-	   for opt in $options; do
-		   if [ `echo $opt | grep '.*-temp-path'` ]; then
-			   value=`echo $opt | cut -d "=" -f 2`
-			   if [ ! -d "$value" ]; then
-				   # echo "creating" $value
-				   mkdir -p $value && chown -R $user $value
-			   fi
-		   fi
-	   done
+	do_start()
+	{
+		start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
+			$DAEMON_ARGS
+		RETVAL="$?"
+		return "$RETVAL"
 	}
 
-	start() {
-		[ -x $nginx ] || exit 5
-		[ -f $NGINX_CONF_FILE ] || exit 6
-		make_dirs
-		echo -n $"Starting $prog: "
-		daemon $nginx -c $NGINX_CONF_FILE
-		retval=$?
-		echo
-		[ $retval -eq 0 ] && touch $lockfile
-		return $retval
+	do_stop()
+	{
+		# Return
+		#   0 if daemon has been stopped
+		#   1 if daemon was already stopped
+		#   2 if daemon could not be stopped
+		#   other if a failure occurred
+		start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+		RETVAL="$?"
+		rm -f $PIDFILE
+		return "$RETVAL"
 	}
 
-	stop() {
-		echo -n $"Stopping $prog: "
-		killproc $prog -QUIT
-		retval=$?
-		echo
-		[ $retval -eq 0 ] && rm -f $lockfile
-		return $retval
+	do_reload() {
+		#
+		start-stop-daemon --stop --signal HUP --quiet --pidfile $PIDFILE --name $NAME
+		RETVAL="$?"
+		return "$RETVAL"
 	}
 
-	restart() {
-		configtest || return $?
-		stop
+	do_configtest() {
+		if [ "$#" -ne 0 ]; then
+			case "$1" in
+				-q)
+					FLAG=$1
+					;;
+				*)
+					;;
+			esac
+			shift
+		fi
+		$DAEMON -t $FLAG -c $CONFFILE
+		RETVAL="$?"
+		return $RETVAL
+	}
+
+	do_upgrade() {
+		OLDBINPIDFILE=$PIDFILE.oldbin
+
+		do_configtest -q || return 6
+		start-stop-daemon --stop --signal USR2 --quiet --pidfile $PIDFILE --name $NAME
+		RETVAL="$?"
 		sleep 1
-		start
-	}
-
-	reload() {
-		configtest || return $?
-		echo -n $"Reloading $prog: "
-		killproc $nginx -HUP
-		RETVAL=$?
-		echo
-	}
-
-	force_reload() {
-		restart
-	}
-
-	configtest() {
-	  $nginx -t -c $NGINX_CONF_FILE
-	}
-
-	rh_status() {
-		status $prog
-	}
-
-	rh_status_q() {
-		rh_status >/dev/null 2>&1
+		if [ -f $OLDBINPIDFILE -a -f $PIDFILE ]; then
+			start-stop-daemon --stop --signal QUIT --quiet --pidfile $OLDBINPIDFILE --name $NAME
+			RETVAL="$?"
+		else
+			echo $"Upgrade failed!"
+			RETVAL=1
+			return $RETVAL
+		fi
 	}
 
 	case "$1" in
 		start)
-			rh_status_q && exit 0
-			$1
+			[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC " "$NAME"
+			do_start
+			case "$?" in
+				0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+				2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+			esac
 			;;
 		stop)
-			rh_status_q || exit 0
-			$1
+			[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+			do_stop
+			case "$?" in
+				0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+				2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+			esac
 			;;
-		restart|configtest)
-			$1
+	  status)
+			status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
 			;;
-		reload)
-			rh_status_q || exit 7
-			$1
+	  configtest)
+			do_configtest
 			;;
-		force-reload)
-			force_reload
+	  upgrade)
+			do_upgrade
 			;;
-		status)
-			rh_status
+	  reload|force-reload)
+			log_daemon_msg "Reloading $DESC" "$NAME"
+			do_reload
+			log_end_msg $?
 			;;
-		condrestart|try-restart)
-			rh_status_q || exit 0
-				;;
+	  restart|force-reload)
+			log_daemon_msg "Restarting $DESC" "$NAME"
+			do_configtest -q || exit $RETVAL
+			do_stop
+			case "$?" in
+				0|1)
+					do_start
+					case "$?" in
+						0) log_end_msg 0 ;;
+						1) log_end_msg 1 ;; # Old process is still running
+						*) log_end_msg 1 ;; # Failed to start
+					esac
+					;;
+				*)
+					# Failed to stop
+					log_end_msg 1
+					;;
+			esac
+			;;
 		*)
-			echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}"
-			exit 2
+			echo "Usage: $SCRIPTNAME {start|stop|status|restart|reload|force-reload|upgrade|configtest}" >&2
+			exit 3
+			;;
 	esac
+
+	exit $RETVAL
 	```
 
 	* set quyền execute cho file.
@@ -364,12 +435,14 @@ apt-get install -y libxml2 libxml2-devel libxslt libxslt-devel gd gd-devel perl-
 	
 	* Cấu hình lại service để chạy nginx khi khởi động OS:
 	```sh
-	chkconfig --add nginx
-	chkconfig --level 345 nginx on
+	update-rc.d nginx defaults
 	```
+	
 * Chạy nginx
 ```sh
 # /etc/init.d/nginx start
+hoặc
+# service nginx start
 ```
 
 ##3. Các module trong nginx
@@ -384,3 +457,190 @@ Một số mmodules nổi tiếng của bên thứ 3 là:
 
 * Các module khác bạn có thể tìm thấy ở trang
 https://www.nginx.com/resources/wiki/modules/#
+
+##. Cấu hình nginx với `nginx.conf` ở thư mục `/etc/nginx`
+```sh
+user  nginx;			# user 
+worker_processes  1;		# Nếu cpu bạn có nhiều hơn 1 nhân, hãy thay đổi giá trị này để nginx được tối ưu hơn
+
+error_log  /var/log/error.log;				# Đường dẫn file log
+error_log  /var/log/error.log  notice;
+error_log  /var/log/error.log  info;
+
+pid        /var/run/nginx.pid;				# Đường dẫn file pid
+
+
+events {
+    worker_connections  1024;				# max_clients = worker_processes * worker_connections
+}
+
+
+http {
+	include       mime.types;
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/sites-enabled/*;
+
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;		 #là số giây timeout nếu không có request nào tiếp theo thì connection sẽ được đóng.
+	# Keep alive: http://notes.viphat.work/keep-alive-la-gi-va-lam-the-nao-de-su-dung-no-de-toi-uu-web-performance/
+	# Keep alive: Keep Alive là một phương thức cho phép sử dụng cùng một kết nối TCP cho một chuỗi các phiên giao dịch HTTP thay vì cứ phải tạo mới từng connection cho mỗi một HTTP Request. 
+	
+
+    #gzip  on;				# Nén gzip
+
+#####################################################	
+    server {
+        listen       80;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   /var/www/html;
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+
+#######################################################
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+##########################################################
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+}
+```
+
+##5. Chạy php với nginx
+
+Bản thân nginx không hỗ trợ xử lý php. Việc xử lý php sẽ do một service khác đảm nhận.
+
+Nginx sẽ forward request đến service này và nhận kết quả về. Service này là php-fpm.
+
+###5.1 Cài đặt php-fpm
+```sh
+apt-get instal php5-fpm
+```
+
+###5.2 Cấu hình php-fpm
+* Cấu hình `/etc/php5/fpm/php-fpm.conf`
+
+* Cấu hình `/etc/php5/fpm/pool.d/www.conf`
+```sh
+listen = /var/run/php5-fpm.sock
+listen.owner = nginx
+listen.group = nginx
+```
+Mình sẽ giải thích việc thay đổi các cấu hình ở trên. Khi PHP-FPM khởi động, file socket /var/run/php5-fpm.sock sẽ được tạo ra dưới quyền (permission) của user và group được chỉ định trong “listen.owner” và “listen.group“. Chỉ có user và group này mới được phép giao tiếp với file socket này. Nếu như bạn muốn Nginx sử dụng PHP-FPM thông qua unix socket, bạn phải set permissions cho file socket này. Đó là lý do tại sao bạn cần phải thay đổi các mục đó.
+
+Nếu bạn không set permissions cho Nginx thì bạn sẽ gặp lỗi “502 Bad Gateway” vì Nginx không được phép giao tiếp với file socket..
+
+```sh
+An error occurred.
+
+Sorry, the page you are looking for is currently unavailable.
+Please try again later.
+
+If you are the system administrator of this resource then you should check the error log for details.
+
+Faithfully yours, nginx.
+```
+
+####Chú ý: User và group ở đây chính là user được cấu hình trong file nginx.conf
+
+###5.3 Cấu hình nginx để chạy php-fpm
+```
+# pass the PHP scripts to FastCGI server listening on the php-fpm socket
+        location ~ \.php$ {
+                try_files $uri =404;
+                root	/var/www/html;
+				#fastcgi_pass   127.0.0.1:9000;
+				fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include fastcgi_params;
+                
+        }
+```
+“fastcgi_pass   127.0.0.1:9000;” có nghĩa là Nginx sẽ giao tiếp với PHP-FPM thông qua một giao thức TCP ở địa chỉ 127.0.0.1 và port 9000.
+
+Bạn nên sử dụng Unix socket để tăng hiệu suất cho các kết nối, kết nối của bạn sẽ nhanh hơn và bảo mật hơn. Để sử dụng Unix socket, bạn cần thay thế 127.0.0.1:9000 thành unix:/var/run/php5-fpm.sock:
+
+
+
+* Khởi động lại nginx: `service nginx restart`
+
+
+
+
