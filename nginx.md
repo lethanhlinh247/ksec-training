@@ -750,5 +750,4 @@ và xóa cả root web `/var/www/vhost.example.com;`
 
 vì hiện tại web server không còn cần phục vụ request nữa. Nó chỉ forward request mà thôi.
 
-Kết quả cuối cùng file này có nội dung như sau:
 
