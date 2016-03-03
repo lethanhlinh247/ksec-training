@@ -645,5 +645,110 @@ Bạn nên sử dụng Unix socket để tăng hiệu suất cho các kết nố
 * Khởi động lại nginx: `service nginx restart`
 
 
+##6. Cấu hình virtual host
+* Ví dụ tạo virtual host cho `system.ksec.com`
 
+* Tạo sẵn một directory để chứa log nginx 
+```sh
+mkdir -p /var/log/nginx
+chown -R nginx:nginx /var/log/nginx
+```
+
+* Tạo file `system.ksec.com.conf` nằm trong thự mục `sites-available`
+```sh
+server {
+    listen       80;
+    server_name system.ksec.com www.system.ksec.com;
+    root /var/www/system.ksec.com;
+    error_log  /var/log/nginx/system.ksec.com_error.log error;
+    access_log  /var/log/nginx/system.ksec.com_access.log  main;
+    index index.html index.php;
+    location ~ \.php$ {
+        try_files $uri =404;
+        #root    /var/www/html;
+        #fastcgi_pass   127.0.0.1:9000;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+```
+
+* Symlink file `system.ksec.com.conf` đến thư mục sites-enabled
+```sh
+ln -s /etc/nginx/sites-available/system.ksec.com /etc/nginx/sites-enabled/system.ksec.com
+```
+
+* Tạo document root cho vhost system.ksec.com
+```sh
+mkdir -p /var/www/system.ksec.com
+chown -R www-data:www-data /var/www/system.ksec.com
+```
+##7. Cấu hình nginx là Reverse proxy
+
+* Tạo một file upstream. File này sẽ chứa thông tin về các cụm load balancer. Nội dung file này như sau:
+```sh
+upstream backend {
+    server 192.168.3.241:80 weight=3 max_fails=3 fail_timeout=10s;
+    server 192.168.3.242:80 max_fails=3 fail_timeout=10s;
+}
+```
+
+Tôi có thể bổ sung thêm nhiều upstream khác nhau. Mỗi upstream là một cụm load balancer.
+
+Mặc định nginx sẽ sử dụng giải thuật cân bằng tải round robin. Giải thuật này rất đơn giản.
+Lần lượt các request được đẩy về từng backend server theo tỉ lệ 1:1
+
+Trong file cấu hình upstream tôi có điều chỉnh chút ít khi đặt trọng số là 3 cho backend server thứ nhất. Khi đó tỉ lệ sẽ là 3:1.
+Cứ sau 3 request liên tiếp đến 192.168.3.241 thì sẽ có tiếp đó một request đến 192.168.3.242
+
+Các tham số max_fails và fail_timeout dùng để đảm bảo health check.
+Kỹ thuật health check này sẽ loại bỏ backend server bị down sau một khoảng thời gian check thất bại và sẽ đưa backend server đó trở lại sau một khoảng thời gian check thành công.
+
+* include file `upstream` vào file cấu hình `nginx.conf`
+
+```sh
+include /etc/nginx/upstream;
+```
+
+* Trong /etc/nginx/sites-available/vhost.example.com.conf, tôi bổ sung thêm các dòng sau:
+```sh
+location /{
+        index index.html index.php;
+        proxy_pass http://backend;
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+}
+````
+
+Tôi sẽ đi lần lượt vào từng dòng cấu hình
+
+* `proxy_pass http://backend;` Các bạn có để ý là giá trị backend cũng được khai báo trong upstream file. Đây là một ánh xạ để load balancer tìm thấy các backend server cho vhost này.
+
+* `proxy_set_header Host $host;` Dòng này cực kỳ quan trọng. Nếu không có dòng này, request dù được đẩy đi nhưng không thể được backend server nhận diện. Backend server sẽ trả về lỗi 404. Trong bài cấu hình nginx cơ bản - phần 2, khi giải thích cơ chế mà web server nhận diện một request thuộc về vhost nào tôi có đề cập đến trường Host nằm trong request header. Khi đi qua reverse proxy, mặc định trường Host này sẽ bị thay thế thành tên cụm backend server. Capture bằng tcpdump, tôi thấy request forward đến backend server có giá trị trường Host là Host: backend\r\n Rõ ràng là với trường Host này backend sẽ không biết phải xử lý thế nào. Tôi muốn giá trị Host của request được forward phải là: Host: vhost.example.com\r\n. Dòng cấu hình proxy_set_header Host $host; sẽ đơn giản set lại host header bằng đúng host header của request đến và thế là backend server sẽ biết được phải làm gì với các forwarded request này.
+
+* `proxy_set_header X-Real-IP $remote_addr;` X-Real-IP là một trường cho biết IP của client đã kết nối đến proxy. Dòng cấu hình trên sẽ đặt IP của client vào trừong X-Real-IP trong request được forward đến backend server
+
+* `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` X-Forwarded-For là một trường cho biết danh sách gồm client ip và các proxy ip mà request này đã đi qua. Trường hợp có một proxy thì giá trị trường này cũng giống X-Real-IP. Dòng cấu hình trên sẽ đặt IP của client vào trừong X-Forwarded-For trong request được forward đến backend server
+
+Một số forward proxy thực hiện chức năng ẩn danh sẽ hoàn toàn không set giá trị nào vào các trường X-Forwarded-For hay X-Real-IP. Do đó server nhận được request sẽ không thể nào biết client nào đang thực hiện request đằng sau proxy ( Đây là một đặc tính che dấu thông tin của proxy )
+
+* `proxy_set_header X-Forwarded-Proto $scheme;` Dòng cấu hình trên sẽ đặt giao thức mà client dùng để kết nối với proxy. Trong demo đi kèm bài viết này thì giá trị đó là https.
+
+* Bên cạnh các bổ sung, tôi có loại bỏ đi vài dòng như location ~ .php
+
+Tại sao lại phải loại bỏ các location khác như location ~ .php
+
+Bởi vì con web server này đang đóng vai trò load balancer cho vhost vhost.example.com Nó sẽ không xử lý các request đến vhost này nữa. Nếu tôi không loại bỏ các location đó thì load balancer tự phục vụ request luôn. Đây không phải là điều tôi mong muốn
+
+* Một điều chỉnh nữa mà bạn có thể thực hiện dù cho nếu không làm thì load balancer vẫn hoạt động. Đó là 
+xóa bỏ dòng root `/var/www/vhost.example.com;`
+và xóa cả root web `/var/www/vhost.example.com;`
+
+vì hiện tại web server không còn cần phục vụ request nữa. Nó chỉ forward request mà thôi.
+
+Kết quả cuối cùng file này có nội dung như sau:
 
