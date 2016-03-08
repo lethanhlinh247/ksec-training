@@ -1,19 +1,13 @@
 #1. Khái niệm Ảo hóa
-Ảo hóa máy chủ là một công nghệ được ra đời nhằm khai thác triệt để khả năng làm việc của các phần cứng trong một hệ thống máy chủ.
+Ảo hóa máy chủ là một công nghệ được ra đời nhằm khai thác triệt để khả năng làm việc của các phần cứng trong một hệ thống máy chủ.Nó hoạt động như một tầng trung gian giữa hệ thống phần cứng máy tính và phần mềm chạy trên nó.Ý tưởng của công nghệ ảo hóa máy chủ là từ một máy vật lý đơn lẻ có thể tạo thành nhiều máy ảo độc lập.
 
-Nó hoạt động như một tầng trung gian giữa hệ thống phần cứng máy tính và phần mềm chạy trên nó.
+* Ảo hóa cho phép tạo nhiều máy ảo trên một máy chủ vật lý, mỗi một máy ảo cũng được cấp phát tài nguyên phần cứng như máy thật gồm có Ram, CPU, Card mạng, ổ cứng, các tài nguyên khác và hệ điều hành riêng. Khi chạy ứng dụng, người sử dụng không nhận biết được ứng dụng đó chạy trên lớp phần cứng ảo.
 
-Ý tưởng của công nghệ ảo hóa máy chủ là từ một máy vật lý đơn lẻ có thể tạo thành nhiều máy ảo độc lập.
+* Các bộ xử lý có ứng dụng ảo hóa thường là Intel VT(Virtual Technology) hoặc AMD Pacifica.
 
-Ảo hóa cho phép tạo nhiều máy ảo trên một máy chủ vật lý, mỗi một máy ảo cũng được cấp phát tài nguyên phần cứng như máy thật gồm có Ram, CPU, Card mạng, ổ cứng, các tài nguyên khác và hệ điều hành riêng.
+* **Ảo hóa cứng** còn được gọi là phân thân máy chủ. Dạng ảo hóa này cho phép tạo nhiều máy ảo trên môt máy chủ vật lý. Mỗi máy ảo chạy hệ điều hành riêng và được cấp phát các tài nguyên phần cứng như số xung nhịp CPU, ổ cứng và bộ nhớ... Các tài nguyên của máy chủ có thể được cấp phát động một cách linh động tùy theo nhu cầu của từng máy ảo. Giải pháp này cho phép hợp nhất các hệ thống máy chủ cồng kềnh thành một máy chủ duy nhất và các máy chủ trước đây bây giờ đóng vai trò là máy ảo ứng dụng chạy trên nó.
 
-Khi chạy ứng dụng, người sử dụng không nhận biết được ứng dụng đó chạy trên lớp phần cứng ảo.
-
-Các bộ xử lý có ứng dụng ảo hóa thường là Intel VT(Virtual Technology) hoặc AMD Pacifica.
-
-Ảo hóa cứng còn được gọi là phân thân máy chủ. Dạng ảo hóa này cho phép tạo nhiều máy ảo trên môt máy chủ vật lý. Mỗi máy ảo chạy hệ điều hành riêng và được cấp phát các tài nguyên phần cứng như số xung nhịp CPU, ổ cứng và bộ nhớ... Các tài nguyên của máy chủ có thể được cấp phát động một cách linh động tùy theo nhu cầu của từng máy ảo. Giải pháp này cho phép hợp nhất các hệ thống máy chủ cồng kềnh thành một máy chủ duy nhất và các máy chủ trước đây bây giờ đóng vai trò là máy ảo ứng dụng chạy trên nó.
-
-Ảo hóa mềm còn gọi là phân thân hệ điều hành. Nó thực ra chỉ là sao chép bản sao của một hệ điều hành chính làm nhiều hệ điều hành con và cho phép các máy ảo ứng dụng có thể chạy trên nó. Như vậy, nếu hệ điều hành chủ là Linux thì cách ảo hoá này sẽ cho phép tạo thêm nhiều bản Linux làm việc trên cùng máy. Cách này có ưu điểm là chỉ cần một bản quyền cho một hệ điều hành và có thể sử dụng cho các máy ảo còn lại. Nhược điểm của nó là không thể sử dụng nhiều hệ điều hành khác nhau trên cùng một máy chủ.
+* **Ảo hóa mềm** còn gọi là phân thân hệ điều hành. Nó thực ra chỉ là sao chép bản sao của một hệ điều hành chính làm nhiều hệ điều hành con và cho phép các máy ảo ứng dụng có thể chạy trên nó. Như vậy, nếu hệ điều hành chủ là Linux thì cách ảo hoá này sẽ cho phép tạo thêm nhiều bản Linux làm việc trên cùng máy. Cách này có ưu điểm là chỉ cần một bản quyền cho một hệ điều hành và có thể sử dụng cho các máy ảo còn lại. Nhược điểm của nó là không thể sử dụng nhiều hệ điều hành khác nhau trên cùng một máy chủ.
 
 ##2. Các thành phần của một hệ thống ảo hóa.
 
@@ -45,18 +39,18 @@ Còn gọi là kiến trúc hosted hypervisor, kiến trúc này sử dụng m�
 
 Ta có thể thấy, một hệ thống ảo hóa sử dụng Mô hình Hosted-based được chia làm 4 lớp hoạt động như sau:
 
-    * Nền tảng phần cứng: Bao gồm các thiết bị nhập xuất, thiết bị lưu trữ (Hdd, Ram), bộ vi xử lý CPU, và các thiết bị khác (các thiết bị mạng, vi xử lý đồ họa, âm thanh…)
-    * Hệ điều hành Host: Hệ điều hành này thực hiện việc liên lạc trực tiếp với phần cứng, qua đó cung cấp các dịch vụ và chức năng thông qua hệ điều hành này.
-    * Hệ thống virtual machine monitor (hypervisor) : Chạy trên nền tảng hệ điều hành Host, các hệ thống này lấy tài nguyên và dịch vụ do hệ điều hành host cung cấp, thực hiện việc quản lý, phân chia trên các tài nguyên này.
-    * Các ứng dụng máy ảo: Sử dụng tài nguyên do hypervisor quản lý.
+ * Nền tảng phần cứng: Bao gồm các thiết bị nhập xuất, thiết bị lưu trữ (Hdd, Ram), bộ vi xử lý CPU, và các thiết bị khác (các thiết bị mạng, vi xử lý đồ họa, âm thanh…)
+ * Hệ điều hành Host: Hệ điều hành này thực hiện việc liên lạc trực tiếp với phần cứng, qua đó cung cấp các dịch vụ và chức năng thông qua hệ điều hành này.
+ * Hệ thống virtual machine monitor (hypervisor) : Chạy trên nền tảng hệ điều hành Host, các hệ thống này lấy tài nguyên và dịch vụ do hệ điều hành host cung cấp, thực hiện việc quản lý, phân chia trên các tài nguyên này.
+ * Các ứng dụng máy ảo: Sử dụng tài nguyên do hypervisor quản lý.
 
 Mối liên lạc giữa phần cứng và trình điều khiển thiết bị trên hệ điều hành trong kiểu ảo hóa VMM được mô tả như sau :
 
-    * Bước đầu tiên mô phỏng phần cứng: Lớp ảo hóa hypervisor sẽ tạo ra một phân vùng trên ổ đĩa cho các máy ảo. Phân vùng này bao gồm các phần cứng ảo như ổ đĩa, bộ nhớ….
-    * Hypervisor xây dựng mối liên lạc giữa lớp ảo hóa với hệ điều hành: Khi một máy ảo truy xuất tài nguyên thì lớp hypervisor sẽ thay thế máy ảo đó gởi các yêu cầu tới hệ điều hành máy chủ để yêu cầu thực hiện,
-    * Khi hệ điều hành nhận được các yêu cầu này. Nó liên lạc với trình điều khiển thiết bị phần cứng.
-    * Các trình điều khiển thiết bị phần cứng liên lạc đến các phần cứng trên máy thực.
-    * Quá trình này sẽ xảy ra ngược lại khi có các trả lời từ các phần cứng đến hệ điều hành chủ.
+ * Bước đầu tiên mô phỏng phần cứng: Lớp ảo hóa hypervisor sẽ tạo ra một phân vùng trên ổ đĩa cho các máy ảo. Phân vùng này bao gồm các phần cứng ảo như ổ đĩa, bộ nhớ….
+ * Hypervisor xây dựng mối liên lạc giữa lớp ảo hóa với hệ điều hành: Khi một máy ảo truy xuất tài nguyên thì lớp hypervisor sẽ thay thế máy ảo đó gởi các yêu cầu tới hệ điều hành máy chủ để yêu cầu thực hiện,
+ * Khi hệ điều hành nhận được các yêu cầu này. Nó liên lạc với trình điều khiển thiết bị phần cứng.
+ * Các trình điều khiển thiết bị phần cứng liên lạc đến các phần cứng trên máy thực.
+ * Quá trình này sẽ xảy ra ngược lại khi có các trả lời từ các phần cứng đến hệ điều hành chủ.
 
 Một số hệ thống hypervisor dạng Hosted-base có thể kể đến như Vmware Server,Microsoft Virtual PC, máy ảo Java ..
 
@@ -67,15 +61,15 @@ Còn gọi là kiến trúc bare-metal hypervisor. Trong mô hình này, lớp p
 
 Ta có thể thấy, một hệ thống ảo hóa máy chủ sử dụng nền tảng Bare-metal hypervisor bao gồm 3 lớp chính:
 
-    * Nền tảng phần cứng: Bao gồm các thiết bị nhập xuất, thiết bị lưu trữ (Hdd, Ram), bộ vi xử lý CPU, và các thiết bị khác (các thiết bị mạng, vi xử lý đồ họa, âm thanh…)
-    * Lớp nền tảng ảo hóa Virtual Machine Monitor (còn gọi là hypervisor), thực hiện việc liên lạc trực tiếp với nền tảng phần cứng phía dưới, quản lý và phân phối tài nguyên cho các hệ điều hành khác nằm trên nó.
-    * Các ứng dụng máy ảo: Các máy ảo này sẽ lấy tài nguyên từ phần cứng, thông qua sự cấp phát và quản lý của hypervisor.
+ * Nền tảng phần cứng: Bao gồm các thiết bị nhập xuất, thiết bị lưu trữ (Hdd, Ram), bộ vi xử lý CPU, và các thiết bị khác (các thiết bị mạng, vi xử lý đồ họa, âm thanh…)
+ * Lớp nền tảng ảo hóa Virtual Machine Monitor (còn gọi là hypervisor), thực hiện việc liên lạc trực tiếp với nền tảng phần cứng phía dưới, quản lý và phân phối tài nguyên cho các hệ điều hành khác nằm trên nó.
+ * Các ứng dụng máy ảo: Các máy ảo này sẽ lấy tài nguyên từ phần cứng, thông qua sự cấp phát và quản lý của hypervisor.
 
 Khi một hệ điều hành thực hiện truy xuất hoặc tương tác tài nguyên phần cứng trên hệ điều hành chủ thì công việc của một Hypervisor sẽ là:
 
-    * Hypervisor mô phỏng phần cứng. nó làm cho các hệ điều hành tưởng rằng mình đang sử dụng tài nguyên vật lý của hệ thống thật.
-    * Hypervisor liên lạc với các trình điều khiển thiết bị
-    * Các trình điều khiển thiết bị phần cứng liên lạc trực tiếp đến phần cứng vật lý.
+ * Hypervisor mô phỏng phần cứng. nó làm cho các hệ điều hành tưởng rằng mình đang sử dụng tài nguyên vật lý của hệ thống thật.
+ * Hypervisor liên lạc với các trình điều khiển thiết bị
+ * Các trình điều khiển thiết bị phần cứng liên lạc trực tiếp đến phần cứng vật lý.
 
 Một số ví dụ về các hệ thống Bare-metal hypervisor như là: Oracle VM, Vmware ESX Server, IBM's POWER Hypervisor (PowerVM), Microsoft's Hyper-V (xuất xưởng tháng 6 năm 2008), Citrix XenServer…
 
@@ -85,13 +79,21 @@ Mô hình Hypervisor - Base có 2 dạng là Monothic Hypervisor và Microkernel
 
 Monolithic Hypervisor là một hệ điều hành máy chủ. Nó chứa những trình điều khiển (Driver) hoạt động phần cứng trong lớp Hypervisor để truy cập tài nguyên phần cứng bên dưới. Khi các hệ điều hành chạy trên các máy ảo truy cập phần cứng thì sẽ thông qua lớp trình điều khiển thiết bị của lớp hypervisor.
 
-Mô hình này mang lại hiệu quả cao, nhưng cũng giống như bất kì các giải pháp khác, bên cạnh mặt ưu điểm thì nó cũng còn có những nhược điểm. Vì trong quá trình hoạt động, nếu lớp trình điều khiển thiết bị phần cứng của nó bị hư hỏng hay xuất hiện lỗi thì các máy ảo cài trên nó đều bị ảnh hưởng và nguy hại. Thêm vào đó là thị trường phần cứng ngày nay rất đa dạng, nhiều chủng loại và do nhiều nhà cung cấp khác nhau, nên trình điều khiển của Hypervisor trong loại ảo hóa này có thể sẽ không thể hỗ trợ điều khiển hoạt động của phần cứng này một cách đúng đắn và hiệu suất chắc chắn cũng sẽ không được như mong đợi. Một trình điều khiển không thể nào điều khiển tốt hoạt động của tất cả các thiết bị nên nó cũng có những thiết bị phần cứng không hỗ trợ. Những điều này cho thấy rằng việc phụ thuộc quá nhiều vào các loại thiết bị dẫn tới sự hạn chế việc phát triển công nghệ này.
+* Mô hình này mang lại hiệu quả cao, nhưng cũng giống như bất kì các giải pháp khác, bên cạnh mặt ưu điểm thì nó cũng còn có những nhược điểm.
+	* Vì trong quá trình hoạt động, nếu lớp trình điều khiển thiết bị phần cứng của nó bị hư hỏng hay xuất hiện lỗi thì các máy ảo cài trên nó đều bị ảnh hưởng và nguy hại.
+	* Thêm vào đó là thị trường phần cứng ngày nay rất đa dạng, nhiều chủng loại và do nhiều nhà cung cấp khác nhau, nên trình điều khiển của Hypervisor trong loại ảo hóa này có thể sẽ không thể hỗ trợ điều khiển hoạt động của phần cứng này một cách đúng đắn và hiệu suất chắc chắn cũng sẽ không được như mong đợi.
+	* Một trình điều khiển không thể nào điều khiển tốt hoạt động của tất cả các thiết bị nên nó cũng có những thiết bị phần cứng không hỗ trợ.
+	
+	= >Những điều này cho thấy rằng việc phụ thuộc quá nhiều vào các loại thiết bị dẫn tới sự hạn chế việc phát triển công nghệ này.
 
 ![](http://voer.edu.vn/media/transforms/20140306-214626-tong-quan-ve-ao-hoa-may-chu/Picture%206.png)
 
 ####3.2.2 Microkernelized Hypervisor.
 
-Microkernelized Hypervisor là một kiểu ảo hóa giống như Monolithic Hypervisor. Điểm khác biệt giữa hai loại này là trong Microkernelized trình điều khiển thiết bị phần cứng bên dưới được cài trên một máy ảo và được gọi là trình điều khiển chính, trình điều khiển chính này tạo và quản lý các trình điều khiển con cho các máy ảo. Khi máy ảo có nhu cầu liên lạc với phần cứng thì trình điều khiển con sẽ liên lạc với trình điều khiển chính và trình điều khiển chính này sẽ chuyển yêu cầu xuống lớp Hypervisor để liên lạc với phần cứng.
+Microkernelized Hypervisor là một kiểu ảo hóa giống như Monolithic Hypervisor. Điểm khác biệt giữa hai loại này là trong Microkernelized trình điều khiển thiết bị phần cứng bên dưới được cài trên một máy ảo và được gọi là trình điều khiển chính, trình điều khiển chính này tạo và quản lý các trình điều khiển con cho các máy ảo.
+
+Khi máy ảo có nhu cầu liên lạc với phần cứng thì trình điều khiển con sẽ liên lạc với trình điều khiển chính và trình điều khiển chính này sẽ chuyển yêu cầu xuống lớp Hypervisor để liên lạc với phần cứng.
+
 ![](http://voer.edu.vn/media/transforms/20140306-214626-tong-quan-ve-ao-hoa-may-chu/Picture%207.png)
 
 ###3.3 Kiến trúc ảo hóa Hybrid.
@@ -104,9 +106,13 @@ Hybrid là một kiểu ảo hóa mới hơn và có nhiều ưu điểm. Trong 
 
 ###4.1. Ảo hóa toàn phần - Full Virtualization.
 
-Đây là loại ảo hóa mà ta không cần chỉnh sửa hệ điều hành khách (guest OS) cũng như các phần mềm đã được cài đặt trên nó để chạy trong môi trường hệ điều hành chủ (host OS). Khi một phần mềm chạy trên guest OS, các đoạn code của nó không bị biến đổi mà chạy trực tiếp trên host OS và phần mềm đó như đang được chạy trên một hệ thống thực sự. Bên cạnh đó, ảo hóa toàn phần có thể gặp một số vấn đề về hiệu năng và hiệu quả trong sử dụng tài nguyên hệ thống.
+Đây là loại ảo hóa mà ta không cần chỉnh sửa hệ điều hành khách (guest OS) cũng như các phần mềm đã được cài đặt trên nó để chạy trong môi trường hệ điều hành chủ (host OS).
 
-Trình điều khiển máy ảo phải cung cấp cho máy ảo một “ảnh” của toàn bộ hệ thống, bao gồm BIOS ảo, không gian bộ nhớ ảo, và các thiết bị ảo. Trình điều khiển máy ảo cũng phải tạo và duy trì cấu trúc dữ liệu cho các thành phần ảo(đặc biệt là bộ nhớ), và cấu trúc này phải luôn được cập nhật cho mỗi một truy cập tương ứng được thực hiện bởi máy ảo.
+* Khi một phần mềm chạy trên guest OS, các đoạn code của nó không bị biến đổi mà chạy trực tiếp trên host OS và phần mềm đó như đang được chạy trên một hệ thống thực sự.
+
+* Bên cạnh đó, ảo hóa toàn phần có thể gặp một số vấn đề về hiệu năng và hiệu quả trong sử dụng tài nguyên hệ thống.
+
+* Trình điều khiển máy ảo phải cung cấp cho máy ảo một “ảnh” của toàn bộ hệ thống, bao gồm BIOS ảo, không gian bộ nhớ ảo, và các thiết bị ảo. Trình điều khiển máy ảo cũng phải tạo và duy trì cấu trúc dữ liệu cho các thành phần ảo(đặc biệt là bộ nhớ), và cấu trúc này phải luôn được cập nhật cho mỗi một truy cập tương ứng được thực hiện bởi máy ảo.
 
 ###4.2. Paravirtualization - Ảo hóa song song
 Là một phương pháp ảo hóa máy chủ mà trong đó, thay vì mô phỏng một môi trường phần cứng hoàn chỉnh, phần mềm ảo hóa này là một lớp mỏng dồn các truy cập các hệ điều hành máy chủ vào tài nguyên máy vật lý cơ sở, sử dụng môt kernel đơn để quản lý các Server ảo và cho phép chúng chạy cùng một lúc (có thể ngầm hiểu, một Server chính là giao diện người dùng được sử dụng để tương tác với hệ điều hành).
@@ -115,13 +121,14 @@ Là một phương pháp ảo hóa máy chủ mà trong đó, thay vì mô phỏ
 
 ![](http://voer.edu.vn/media/transforms/20140306-214626-tong-quan-ve-ao-hoa-may-chu/paravirtualization.png)
 
-Phương pháp ảo hóa này có hai ưu điểm. Thứ nhất, giảm chi phí hoạt động do số lượng mã rất ít. Lớp phần mềm của ảo hóa song song hoạt động giống một cảnh sát giao thông , nó cho phép một hệ điều hành chủ truy cập các tài nguyên vật lý của phần cứng, đồng thời ngăn không cho các hệ điều hành chủ khác truy cập các nguồn tài nguyên đó.
+* Phương pháp ảo hóa này có hai ưu điểm.
+	* Thứ nhất, giảm chi phí hoạt động do số lượng mã rất ít. Lớp phần mềm của ảo hóa song song hoạt động giống một cảnh sát giao thông , nó cho phép một hệ điều hành chủ truy cập các tài nguyên vật lý của phần cứng, đồng thời ngăn không cho các hệ điều hành chủ khác truy cập các nguồn tài nguyên đó.
+	* Ưu điểm thứ hai của ảo hóa song song song là nó không giới hạn các trình điều khiển thiết bị trong phần mềm ảo hóa; thực tế là ảo hóa song song không hề có các trình điều khiển thiết bị. Thay vào đó, nó sử dụng các trình điều khiển thiết bị có trong một hệ điều hành chủ, gọi là máy chủ đặc quyền. Nó cho phép các công ty tận dụng hiệu suất phần cứng các máy chủ, chứ không bị giới hạn phần cứng mà các trình điều khiển phải sẵn có trong phần mềm ảo hóa này như trong ảo hóa mô phỏng phần cứng.
 
-Ưu điểm thứ hai của ảo hóa song song song là nó không giới hạn các trình điều khiển thiết bị trong phần mềm ảo hóa; thực tế là ảo hóa song song không hề có các trình điều khiển thiết bị. Thay vào đó, nó sử dụng các trình điều khiển thiết bị có trong một hệ điều hành chủ, gọi là máy chủ đặc quyền. Nó cho phép các công ty tận dụng hiệu suất phần cứng các máy chủ, chứ không bị giới hạn phần cứng mà các trình điều khiển phải sẵn có trong phần mềm ảo hóa này như trong ảo hóa mô phỏng phần cứng.
+* Tuy nhiên, phương pháp ảo hóa này cũng có một nhược điểm lớn:
+	* Do ít quan trọng và dồn truy cập vào một phần cứng cơ sở, ảo hóa song song yêu cầu các hệ điều hành chủ phải được thay đổi để tương tác với giao diện của nó. Công việc này chỉ có thể được thực hiện khi truy cập mã nguồn của hệ điều hành
 
-Tuy nhiên, phương pháp ảo hóa này cũng có một nhược điểm lớn: Do ít quan trọng và dồn truy cập vào một phần cứng cơ sở, ảo hóa song song yêu cầu các hệ điều hành chủ phải được thay đổi để tương tác với giao diện của nó. Công việc này chỉ có thể được thực hiện khi truy cập mã nguồn của hệ điều hành
-
-Do đó, nhược điểm này sẽ được giảm thiểu khi sử dụng các máy chủ có các con chip mới trong cơ sở hạ tầng sản xuất. Một ví dụ của ảo hóa song song là một sản phẩm nguồn mở mới có tên gọi Xen, được công ty thương mại XenSource bảo trợ. Xen cũng xuất hiện trong các nguồn phân phối Linux gần đây từ Red Hat và Novell, và có trong nhiều nguồn phân phối cộng đồng Linux như Debian và Ubuntu. XenSource cũng tự bán các sản phẩm dựa trên Xen. Một phần mềm tiềm năng khác là Virtual Iron, một giải pháp dựa trên Xen
+=> Do đó, nhược điểm này sẽ được giảm thiểu khi sử dụng các máy chủ có các con chip mới trong cơ sở hạ tầng sản xuất. Một ví dụ của ảo hóa song song là một sản phẩm nguồn mở mới có tên gọi Xen, được công ty thương mại XenSource bảo trợ. Xen cũng xuất hiện trong các nguồn phân phối Linux gần đây từ Red Hat và Novell, và có trong nhiều nguồn phân phối cộng đồng Linux như Debian và Ubuntu. XenSource cũng tự bán các sản phẩm dựa trên Xen. Một phần mềm tiềm năng khác là Virtual Iron, một giải pháp dựa trên Xen
 
 ###4.3.Ảo hóa hệ điều hành.
 
@@ -143,15 +150,13 @@ Do đó, khái niệm ảo hóa ứng dụng ra đời. Một ứng dụng đư�
 
 Có khá nhiều tổ chức đã tham gia vào quá trình ảo hóa ứng dụng với các mô hình khác nhau. Có thể kể đến như Citrix với mô hình Application Streaming, Microsoft với mô hình Microsoft Application Virtualization. Ở đây chúng ta sẽ tìm hiểu về mô hình Application Streaming của Citrix.
 
-Có khá nhiều tổ chức đã tham gia vào quá trình ảo hóa ứng dụng với các mô hình khác nhau. Có thể kể đến như Citrix với mô hình Application Streaming, Microsoft với mô hình Microsoft Application Virtualization. Ở đây chúng ta sẽ tìm hiểu về mô hình Application Streaming của Citrix.
-
 ![](http://voer.edu.vn/media/transforms/20140306-214626-tong-quan-ve-ao-hoa-may-chu/Picture%201.png)
 
 Kỹ thuật streaming cho phép người quản lý có thể “đẩy” và quản lý các ứng dụng trên nền tảng hệ điều hành Windows đến bất cứ người dùng nào theo yêu cầu. Cụ thể hơn: thông qua các đường truyền dữ liệu được dành riêng, các ứng dụng được tải về thiết bị của người dùng, sau đó chạy trên một môi trường giả lập. Các thành phần của hệ thống application streaming này bao gồm:
 
-    Application Profiler: Tại đây các application được đóng gói, kèm với nó là các thông tin như tài nguyên cần thiết để chạy ứng dụng, các quy tắc khi triển khai trên thiết bị người dùng, các thành phần của ứng dụng…
-    Application Hub: Sau khi đã được đóng gói kèm theo các thông tin cần thiết, các ứng dụng/phần mềm được lưu trữ tại đây.
-    Một đặc điểm với kỹ thuật này là: Các ứng dụng được lưu trữ tại bộ nhớ cục bộ tại các máy tính cuối của người dùng, và được sử dụng như các phần mềm được cài đặt theo cách truyền thống. Nhưng thật sự nó không được cài đặt, mà là chạy trên lớp đệm là môi trường ảo hóa nằm ngay trên hệ điều hành.
+ * Application Profiler: Tại đây các application được đóng gói, kèm với nó là các thông tin như tài nguyên cần thiết để chạy ứng dụng, các quy tắc khi triển khai trên thiết bị người dùng, các thành phần của ứng dụng…
+ * Application Hub: Sau khi đã được đóng gói kèm theo các thông tin cần thiết, các ứng dụng/phần mềm được lưu trữ tại đây.
+ * Một đặc điểm với kỹ thuật này là: Các ứng dụng được lưu trữ tại bộ nhớ cục bộ tại các máy tính cuối của người dùng, và được sử dụng như các phần mềm được cài đặt theo cách truyền thống. Nhưng thật sự nó không được cài đặt, mà là chạy trên lớp đệm là môi trường ảo hóa nằm ngay trên hệ điều hành.
 
 ##5. Ưu điểm, nhược điểm của ảo hoá máy chủ.
 ###5.1. Ưu điểm.
