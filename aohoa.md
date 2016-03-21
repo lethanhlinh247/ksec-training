@@ -73,7 +73,7 @@ Khi một hệ điều hành thực hiện truy xuất hoặc tương tác tài 
 
 Một số ví dụ về các hệ thống Bare-metal hypervisor như là: Oracle VM, Vmware ESX Server, IBM's POWER Hypervisor (PowerVM), Microsoft's Hyper-V (xuất xưởng tháng 6 năm 2008), Citrix XenServer…
 
-Mô hình Hypervisor - Base có 2 dạng là Monothic Hypervisor và Microkernel Hypervisor.
+* Mô hình Hypervisor - Base có 2 dạng là Monothic Hypervisor và Microkernel Hypervisor.
 
 ####3.2.1 Monolithic Hypervisor.
 
@@ -84,7 +84,7 @@ Monolithic Hypervisor là một hệ điều hành máy chủ. Nó chứa nhữn
 	* Thêm vào đó là thị trường phần cứng ngày nay rất đa dạng, nhiều chủng loại và do nhiều nhà cung cấp khác nhau, nên trình điều khiển của Hypervisor trong loại ảo hóa này có thể sẽ không thể hỗ trợ điều khiển hoạt động của phần cứng này một cách đúng đắn và hiệu suất chắc chắn cũng sẽ không được như mong đợi.
 	* Một trình điều khiển không thể nào điều khiển tốt hoạt động của tất cả các thiết bị nên nó cũng có những thiết bị phần cứng không hỗ trợ.
 	
-	= >Những điều này cho thấy rằng việc phụ thuộc quá nhiều vào các loại thiết bị dẫn tới sự hạn chế việc phát triển công nghệ này.
+	**= >** Những điều này cho thấy rằng việc phụ thuộc quá nhiều vào các loại thiết bị dẫn tới sự hạn chế việc phát triển công nghệ này.
 
 ![](http://voer.edu.vn/media/transforms/20140306-214626-tong-quan-ve-ao-hoa-may-chu/Picture%206.png)
 
@@ -128,7 +128,7 @@ Là một phương pháp ảo hóa máy chủ mà trong đó, thay vì mô phỏ
 * Tuy nhiên, phương pháp ảo hóa này cũng có một nhược điểm lớn:
 	* Do ít quan trọng và dồn truy cập vào một phần cứng cơ sở, ảo hóa song song yêu cầu các hệ điều hành chủ phải được thay đổi để tương tác với giao diện của nó. Công việc này chỉ có thể được thực hiện khi truy cập mã nguồn của hệ điều hành
 
-=> Do đó, nhược điểm này sẽ được giảm thiểu khi sử dụng các máy chủ có các con chip mới trong cơ sở hạ tầng sản xuất. Một ví dụ của ảo hóa song song là một sản phẩm nguồn mở mới có tên gọi Xen, được công ty thương mại XenSource bảo trợ. Xen cũng xuất hiện trong các nguồn phân phối Linux gần đây từ Red Hat và Novell, và có trong nhiều nguồn phân phối cộng đồng Linux như Debian và Ubuntu. XenSource cũng tự bán các sản phẩm dựa trên Xen. Một phần mềm tiềm năng khác là Virtual Iron, một giải pháp dựa trên Xen
+**=>** Do đó, nhược điểm này sẽ được giảm thiểu khi sử dụng các máy chủ có các con chip mới trong cơ sở hạ tầng sản xuất. Một ví dụ của ảo hóa song song là một sản phẩm nguồn mở mới có tên gọi Xen, được công ty thương mại XenSource bảo trợ. Xen cũng xuất hiện trong các nguồn phân phối Linux gần đây từ Red Hat và Novell, và có trong nhiều nguồn phân phối cộng đồng Linux như Debian và Ubuntu. XenSource cũng tự bán các sản phẩm dựa trên Xen. Một phần mềm tiềm năng khác là Virtual Iron, một giải pháp dựa trên Xen
 
 ###4.3.Ảo hóa hệ điều hành.
 
