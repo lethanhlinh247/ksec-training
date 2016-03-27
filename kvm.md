@@ -1,5 +1,5 @@
 # Ảo hóa KVM – Kernel-Based Virtual Machine
-![](http://i1.wp.com/blogit.edu.vn/wp-content/uploads/2015/08/download.jpg)
+![](http://i1.wp.com/blogit.edu.vn/wp-content/uploads/2015/08/download.jpg?resize=270%2C187)
 
 * KVM ra đời phiên bản đầu tiên vào năm 2007 bởi công ty Qumranet tại Isarel, KVM được tích hợp sẵn vào nhân của hệ điều hành Linux bắt đầu từ phiên bản 2.6.20.
 Năm 2008, RedHat đã mua lại Qumranet và bắt đầu phát triển, phổ biến KVM Hypervisor.
