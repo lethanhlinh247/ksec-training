@@ -250,12 +250,13 @@ virt-top
 ```
 
 ##5. Install WebVirtMgr
-###5.1 Installation
+###5.1 Installation Only web panel
+####5.1.1 Installation
 ```sh
 $ sudo apt-get install git python-pip python-libvirt python-libxml2 novnc supervisor nginx 
 ```
 
-###5.2 Install python requirements and setup Django environment
+####5.1.2 Install python requirements and setup Django environment
 ```sh
 $ git clone git://github.com/retspen/webvirtmgr.git
 $ cd webvirtmgr
@@ -284,8 +285,74 @@ Run:
 $ ./manage.py createsuperuser
 ```
 
-###5.3 
+####5.1.3 Khởi chạy 
 ```sh
 $ ./manage.py runserver 0:8000
 ```
+
+###5.1 Setup host server (Server for VM's)
+* Install packages libvirt-bin, KVM, sasl2-bin
+```sh
+$ sudo apt-get install kvm libvirt-bin sasl2-bin
+```
+
+* Add the option `-l` in the file `/etc/default/libvirt-bin`
+```sh
+libvirtd_opts="-d -l"
+```
+
+* The file `/etc/libvirt/libvirtd.conf` uncomment the line
+```sh
+listen_tls = 0
+listen_tcp = 1
+```
+
+* Restart the daemon libvirtd, because after installation it runs automatically
+```sh
+$ sudo service libvirt-bin restart
+```
+
+* Adding users and setting their passwords is done with the saslpasswd2 command. When running this command it is important to tell it that the appname is libvirt. As an example, to add a user fred, run
+```sh
+$ sudo saslpasswd2 -a libvirt fred
+Password: xxxxxx
+Again (for verification): xxxxxx
+```
+
+* To see a list of all accounts the `sasldblistusers2` command can be used. This command expects to be given the path to the libvirt user database, which is kept in `/etc/libvirt/passwd.db`
+```sh
+$ sudo sasldblistusers2 -f /etc/libvirt/passwd.db
+fred@webvirtmgr.net: userPassword
+```
+
+* To disable a user's access, use the command `saslpasswd2` with the `-d`
+```sh
+$ sudo saslpasswd2 -a libvirt -d fred
+```
+
+* Configuring the firewall
+
+	* Create a file `/etc/ufw/applications.d/libvirtd` and it add the following lines
+	```sh
+	[Libvirt]
+	title=Virtualization library
+	description=Open port for WebVirtMgr
+	ports=16509/tcp
+	```
+	* Add a firewall rule in the chain
+	```sh
+	$ sudo ufw allow from any to any app Libvirt
+	```
+* Test connection
+```sh
+virsh -c qemu+tcp://IP_address/system nodeinfo
+```
+
+
+
+
+
+https://www.webvirtmgr.net/docs/
+
+
 
