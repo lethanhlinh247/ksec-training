@@ -148,6 +148,33 @@ mkdir -p /var/kvm/images
 --location 'http://vn.archive.ubuntu.com/ubuntu/dists/vivid/main/installer-amd64/' \
 --extra-args 'console=ttyS0,115200n8 serial'
 ```
+ 	
+For options, make sure 'man virt-install', there are many options
+```sh
+--name
+specify the name of Virtual Machine
+--ram
+specify the amount of memories of Virtual Machine
+--disk path=xxx ,size=xxx
+'path=' ⇒ specify the location of disks of Virtual Machine
+'size=' ⇒ specify the amount of disks of Virtual Machine
+--vcpus
+specify the virtual CPUs
+--os-type
+specify the type of GuestOS
+--os-variant
+specify the kind of GuestOS
+--network
+specify network types of Virtual Machine
+--graphics
+specify the kind of graphics. if set 'none', it means nographics.
+--console
+specify the console type
+--location
+specify the location of installation where from
+--extra-args
+specify parameters that is set in kernel 
+```
 
 * after installation, back to KVM host and shutdown the guest like follows
 ```sh
