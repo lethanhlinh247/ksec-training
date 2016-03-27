@@ -1,5 +1,5 @@
 # Ảo hóa KVM – Kernel-Based Virtual Machine
-![](http://i1.wp.com/blogit.edu.vn/wp-content/uploads/2015/08/download.jpg?resize=270%2C187)
+![](http://i.imgur.com/0D1gfHS.jpg)
 
 * KVM ra đời phiên bản đầu tiên vào năm 2007 bởi công ty Qumranet tại Isarel, KVM được tích hợp sẵn vào nhân của hệ điều hành Linux bắt đầu từ phiên bản 2.6.20.
 Năm 2008, RedHat đã mua lại Qumranet và bắt đầu phát triển, phổ biến KVM Hypervisor.
@@ -10,12 +10,12 @@ Năm 2008, RedHat đã mua lại Qumranet và bắt đầu phát triển, phổ 
 	* Cung cấp các máy ảo đa dạng, hỗ trợ nhiều loại hệ điều hành và không cần tinh chỉnh lại các ảnh của hệ điều hành
 	* Sử dụng cơ chế quản lý vùng nhớ của Linux (KSM) và các cơ chế bảo mật có sẵn của Linux (SELinux)
 
-![Kiến trúc KVM](http://i2.wp.com/blogit.edu.vn/wp-content/uploads/2015/08/Kien-truc-KVM.jpg?resize=597%2C345)
+![Kiến trúc KVM](http://i.imgur.com/mKl6dwg.jpg)
 
 * Với ưu điểm nguồn mở và độ tùy biến cao, KVM hypervisor được lựa chọn là nền tảng ảo hóa chính khi lựa chọn công nghệ ảo hóa nguồn mở.
 KVM cũng đồng thời là nền tảng của giải pháp điện toán đám mây nguồn mở nổi tiếng nhất hiện nay là OpenStack.
 
-![ Mô hình quản lý tập trung và phân phối tài nguyên nhiều máy chủ KVM trong hệ thống điện toán đám mây nguồn mở OpenStack](http://i1.wp.com/blogit.edu.vn/wp-content/uploads/2015/08/KVM-OpenStack.jpg?resize=414%2C295)
+![ Mô hình quản lý tập trung và phân phối tài nguyên nhiều máy chủ KVM trong hệ thống điện toán đám mây nguồn mở OpenStack](http://i.imgur.com/gKaKAau.jpg)
 
 * KVM là công nghệ ảo hóa phần cứng và đòi hỏi CPU trên máy tính phải được hỗ trợ một trong các công nghệ sau: Intel VT hoặc AMD-V.
 
