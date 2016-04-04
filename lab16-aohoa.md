@@ -2,7 +2,7 @@
 Hướng dẫn chi tiết: https://github.com/cosy294/ksec-training/blob/master/kvm.md
 
 ##Mô hình
-![http://i.imgur.com/UT6y6Fy.jpg]
+!()[http://i.imgur.com/UT6y6Fy.jpg]
 
 * Server(192.168.1.188): Chạy KVM và WebVirtMgr
 
