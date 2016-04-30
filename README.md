@@ -1,4 +1,4 @@
-#Lê Thanh Lĩnh - KSEC Club - KMA
+#Cosy294 - KSEC Club - KMA
 
 #Tuần 1: 
 - Học cách sử dụng github
