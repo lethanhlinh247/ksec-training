@@ -1,4 +1,4 @@
-Lê Thanh Lĩnh - KSEC Club - KMA
+#<center>Lê Thanh Lĩnh - KSEC Club - KMA</center>
 
 #Tuần 1: 
 - Học cách sử dụng github
@@ -6,7 +6,9 @@ Lê Thanh Lĩnh - KSEC Club - KMA
 - Một số giao thức lớp Ứng dụng trong mô hình TCP/IP
 
 https://github.com/hocchudong/git-github-for-sysadmin
+
 http://4share.vn/f/2d1f14191d1e1415
+
 http://4share.vn/f/794b404d494d4949
 
 #Tuần 2:
