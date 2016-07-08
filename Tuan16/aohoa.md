@@ -83,7 +83,7 @@ Monolithic Hypervisor là một hệ điều hành máy chủ. Nó chứa nhữn
 	* Vì trong quá trình hoạt động, nếu lớp trình điều khiển thiết bị phần cứng của nó bị hư hỏng hay xuất hiện lỗi thì các máy ảo cài trên nó đều bị ảnh hưởng và nguy hại.
 	* Thêm vào đó là thị trường phần cứng ngày nay rất đa dạng, nhiều chủng loại và do nhiều nhà cung cấp khác nhau, nên trình điều khiển của Hypervisor trong loại ảo hóa này có thể sẽ không thể hỗ trợ điều khiển hoạt động của phần cứng này một cách đúng đắn và hiệu suất chắc chắn cũng sẽ không được như mong đợi.
 	* Một trình điều khiển không thể nào điều khiển tốt hoạt động của tất cả các thiết bị nên nó cũng có những thiết bị phần cứng không hỗ trợ.
-	
+
 	**= >** Những điều này cho thấy rằng việc phụ thuộc quá nhiều vào các loại thiết bị dẫn tới sự hạn chế việc phát triển công nghệ này.
 
 ![](http://voer.edu.vn/media/transforms/20140306-214626-tong-quan-ve-ao-hoa-may-chu/Picture%206.png)
@@ -102,7 +102,7 @@ Hybrid là một kiểu ảo hóa mới hơn và có nhiều ưu điểm. Trong 
 
 ![](http://voer.edu.vn/media/transforms/20140306-214626-tong-quan-ve-ao-hoa-may-chu/Picture%208.png)
 
-##4. Các mức độ ảo hóa. 
+##4. Các mức độ ảo hóa.
 
 ###4.1. Ảo hóa toàn phần - Full Virtualization.
 
@@ -181,3 +181,25 @@ Kỹ thuật streaming cho phép người quản lý có thể “đẩy” và 
 * Ảo hóa có thể dẫn đến hiệu năng thấp: Thậm chí nếu cỗ máy mà trên đó các hệ điều hành và ứng dụng ảo đang chạy đủ mạnh, vấn đề hiệu năng vẫn có khả năng xảy ra. Một trong những thực tế gặp phải đó là một ứng dụng khi chạy trên môi trường không ảo hóa thì hoạt động tốt nhưng lại gặp vấn đề khi chạy trên hệ thống ảo hóa. Ví dụ: Hiệu suất của stress test trong môi trường ảo hóa có kết quả rất khác (và sai lệch) khi so sánh với stress test trên một máy dành riêng. Điều tốt nhất cần làm khi triển khai trên một nền tảng ảo hóa là luôn kiểm tra và theo dõi sát sao các vấn đề tiềm ẩn.
 * Ứng dụng ảo hóa không phải luôn luôn khả dụng: Trong khi trong hầu hết các trường hợp không thể dự đoán chính xác được một ứng dụng cụ thể có thể hoạt động tốt khi được ảo hóa hay không thì cũng có một số ứng dụng khác qua thực tiễn cho thấy bị suy giảm hiệu năng khi được ảo hóa.
 * Rủi ro lỗi vật lý cao: Rất tuyệt vời để lưu trữ/chạy 5 Server (ảo)rất quan trọng của bạn trong chỉ một Server vật lý. Nhưng bạn có bao giờ tưởng tượng được xung đột của 5 Server này chỉ bởi lỗi của 1 phần cứng trong Server vật lý? Nó sẽ đặt cả 5 Server quan trọng của bạn trong tình trạng offline. Đó rõ ràng là một nhược điểm và hạn chế lớn của ảo hóa cần phải cân nhắc khi có kế hoạch thiết lập một môi trường ảo hóa máy chủ.
+
+
+##6. KVM & QEMU
+- 1. Nếu host computer chỉ được cài duy nhất QEMU và không có/không kích hoạt KVM thì có thể tạo ra guest VM chạy trên computer đó được không?
+
+–> Được. Bản thân QEMU đã là một type-2 hypervisor với đầy đủ khả năng tạo ra guest VM có các hardware được giả lập rồi.
+
+- 2. Nếu host computer chỉ có cài KVM và không có chạy QEMU hay bất cứ một hypervisor nào khác thì có thể tạo được guest VM trên computer đó hay không?
+
+–> Không. Bản thân KVM không thực sự là một hypervisor có chức năng giả lập hardware để có thể chạy guest VM. Chính xác nó chỉ là một Linux kernel module hỗ trợ cơ chế mapping các instruction giữa virtual CPU (của guest VM) và physical CPU (của host computer) với yêu cầu là physical CPU đó cần có virtualization extension, ví dụ như Intel VT-x hay AMD-V.
+
+Có thể hình dung KVM giống như driver cho hypervisor để sử dụng được virtualization extension của physical CPU nhằm boost performance cho guest VM. KVM như định nghĩa trên official website thì là core virtualization infrastructure mà thôi, nó được các hypervisor khác lợi dụng làm back-end để tiếp cận được các công nghệ hardware acceleration.
+
+- 3. Thường thấy người ta chạy chung QEMU/KVM, điều này có tác dụng gì?
+
+–> Nhằm nâng cao hiệu suất của VM. Cụ thể, lúc tạo VM bằng QEMU có VirtType là KVM thì khi đó các instruction có nghĩa đối với virtual CPU sẽ được QEMU sử dụng KVM để mapping thành các instruction có nghĩa đối với physical CPU. Làm như vậy sẽ nhanh hơn là chỉ chạy độc lập QEMU, vì nếu không có KVM thì QEMU sẽ phải quay về (fall-back) sử dụng translator của riêng nó là TCG để chuyển dịch các instruction của virtual CPU rồi đem thực thi trên physical CPU.
+
+Khi QEMU/KVM kết hợp nhau thì tạo thành type-1 hypervisor.
+
+- 4. Tóm lại là gì?
+
+QEMU cần KVM để boost performance và ngược lại KVM cần QEMU (modified version) để cung cấp giải pháp full virtualization hoàn chỉnh.
